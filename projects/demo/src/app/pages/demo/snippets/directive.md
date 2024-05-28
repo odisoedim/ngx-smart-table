@@ -1,0 +1,13 @@
+// ...
+
+@NgModule({
+  imports: [
+    // ...
+    
+    NgxSmartTableModule,
+    
+    // ...
+  ],
+  declarations: [ ... ]
+})
+// ...
