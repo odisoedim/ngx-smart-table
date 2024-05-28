@@ -1,7 +1,7 @@
 <header-component tagline="Quick Start & Demo"></header-component>
 <section class="main-content">
 
-  <h2 >Getting Started</h2>
+  <h2>Getting Started</h2>
   <p>
     Hello and Welcome!
   </p>
@@ -13,7 +13,8 @@
   <pre>
     <code highlight class="bash">{{ snippets.install }}</code>
   </pre>
-  <p>This command will create a record in your `package.json` file and install the package into the npm modules folder.</p>
+  <p>This command will create a record in your `package.json` file and install the package into the npm modules folder.
+  </p>
 
   <h2>Examples</h2>
   <h3>Minimal Setup Example</h3>
@@ -30,8 +31,10 @@
     <code highlight class="typescript">{{ snippets.directive }}</code>
   </pre>
   <p>
-    Now, we need to configure the table and add it into the template. The only <strong>required</strong> setting for the component to start working is a columns configuration.<br>
-    Let's register <i>settings</i> property inside of the component where we want to have the table and configure some columns (<a [routerLink]="['/documentation']">Settings documentation</a>):
+    Now, we need to configure the table and add it into the template. The only <strong>required</strong> setting for the
+    component to start working is a columns configuration.<br>
+    Let's register <i>settings</i> property inside of the component where we want to have the table and configure some
+    columns (<a [routerLink]="['/documentation']">Settings documentation</a>):
   </p>
   <pre>
     <code highlight class="typescript">{{ snippets.settings }}</code>
@@ -49,10 +52,13 @@
     <basic-example></basic-example>
   </div>
   <p>
-    All functions are available by default and you don't need to configure them somehow, so you already able to add/edit/delete rows, sort or filter the table, etc.
+    All functions are available by default and you don't need to configure them somehow, so you already able to
+    add/edit/delete rows, sort or filter the table, etc.
   </p>
   <p>
-    But it feels like something is missing... Right, there is no data in the table by default. To add some, let's create an array property with a list of objects in the component. Please note that object keys are same as in the columns configuration.
+    But it feels like something is missing... Right, there is no data in the table by default. To add some, let's create
+    an array property with a list of objects in the component. Please note that object keys are same as in the columns
+    configuration.
   </p>
   <pre>
     <code highlight class="typescript">{{ snippets.array }}</code>
@@ -69,7 +75,7 @@
     That's it for a minimal setup, our final component should look like this, pretty simple, huh?
   </p>
   <pre class="with-source">
-    <a class="source" href="https://github.com/dj-fiorex/angular2-smart-table/blob/master/projects/demo/src/app/shared/components/basic-example/basic-example-data.component.ts" target="_blank">Demo Source</a>
+    <a class="source" href="https://github.com/odisoedim/angular2-smart-table/blob/master/projects/demo/src/app/shared/components/basic-example/basic-example-data.component.ts" target="_blank">Demo Source</a>
     <code highlight class="typescript">{{ snippets.basicFull }}</code>
   </pre>
 

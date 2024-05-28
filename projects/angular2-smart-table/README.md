@@ -48,7 +48,7 @@ First thing you need to do is to import the angular2-smart-table directives into
 
 ```
 
-import { Angular2SmartTableModule } from 'angular2-smart-table';
+import { Angular2SmartTableModule } from '@odiso/angular2-smart-table';
 
 ```
 
@@ -71,7 +71,7 @@ Then register it by adding to the list of directives of your module:
 ```
 
 Now, we need to configure the table and add it into the template. The only <strong>required</strong> setting for the component to start working is a columns configuration.
-Let's register <i>settings</i> property inside of the component where we want to have the table and configure some columns [Settings documentation](https://github.com/dj-fiorex/angular2-smart-table):
+Let's register <i>settings</i> property inside of the component where we want to have the table and configure some columns [Settings documentation](https://github.com/odisoedim/angular2-smart-table):
     
 ```
 settings = {
@@ -150,7 +150,7 @@ And pass the data to the table:
 Now you have some data in the table. -->
  
 ## Further Documentation
-Installation, customization and other useful articles: https://github.com/dj-fiorex/angular2-smart-table
+Installation, customization and other useful articles: https://github.com/odisoedim/angular2-smart-table
 
 ## How can I support developers?
 - Star our GitHub repo :star:
@@ -171,4 +171,4 @@ Installation, customization and other useful articles: https://github.com/dj-fio
 
 [<img alt="nureha" src="https://avatars2.githubusercontent.com/u/7064537?v=3&s=60" width="60">](https://github.com/nureha)[<img alt="vlupu10" src="https://avatars1.githubusercontent.com/u/3597512?v=3&s=60" width="60">](https://github.com/vlupu10)[<img alt="zhouhao27" src="https://avatars1.githubusercontent.com/u/8099731?v=3&s=60" width="60">](https://github.com/zhouhao27)[<img alt="hkb1990" src="https://avatars1.githubusercontent.com/u/2637138?v=3&s=60" width="60">](https://github.com/hkb1990)[<img alt="liaosong" src="https://avatars0.githubusercontent.com/u/3927282?v=3&s=60" width="60">](https://github.com/liaosong)[<img alt="ktriek" src="https://avatars2.githubusercontent.com/u/4461059?v=3&s=60" width="60">](https://github.com/ktriek)
 
-### From dj-fiorex, forked from akveo
+### From odisoedim, forked from akveo

@@ -30,7 +30,7 @@ export class AdvancedExamplesCustomEditorComponent {
       id: 3,
       name: 'Clementine Bauch',
       username: 'Samantha',
-      link: '<a href="https://github.com/dj-fiorex/angular2-smart-table">Angular2 smart table</a>',
+      link: '<a href="https://github.com/odisoedim/angular2-smart-table">Angular2 smart table</a>',
     },
     {
       id: 4,

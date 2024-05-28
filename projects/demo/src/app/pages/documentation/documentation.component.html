@@ -19,7 +19,8 @@
     <tr>
       <td>[source]</td>
       <td><span class="highlight">Array</span>|<span class="highlight">DataSource</span></td>
-      <td>If an array of objects is provided, it is automatically wrapped into a <span class="highlight">LocalDataSource</span>.</td>
+      <td>If an array of objects is provided, it is automatically wrapped into a <span
+          class="highlight">LocalDataSource</span>.</td>
     </tr>
   </table>
 
@@ -121,7 +122,8 @@
       <td>true</td>
       <td>
         Whether this column is editable or not. If this is false you can still enter a value when you add
-        a new row. Use the <span class="highlight">isAddable</span> setting to control the behavior when adding a new row.
+        a new row. Use the <span class="highlight">isAddable</span> setting to control the behavior when adding a new
+        row.
         Note: the deprecated alias for this setting is <span class="highlight">editable</span>.
       </td>
     </tr>
@@ -135,12 +137,14 @@
     </tr>
     <tr>
       <td>type</td>
-      <td><span class="highlight">'text'</span>|<span class="highlight">'html'</span>|<span class="highlight">'custom'</span></td>
+      <td><span class="highlight">'text'</span>|<span class="highlight">'html'</span>|<span
+          class="highlight">'custom'</span></td>
       <td>'text'</td>
       <td>
         If type is <span class="highlight">text</span> then cell value will be inserted as text.<br>
         If type is <span class="highlight">html</span> then cell value will be inserted as html.<br>
-        If type is <span class="highlight">custom</span> the <span class="highlight">renderComponent</span> property must be defined.
+        If type is <span class="highlight">custom</span> the <span class="highlight">renderComponent</span> property
+        must be defined.
       </td>
     </tr>
     <tr>
@@ -159,7 +163,9 @@
       <td>
         Custom component that will be responsible for rendering the cell content while in view mode.<br>
         Type must be <span class="highlight">custom</span> in order for this to work.<br>
-        You can see an <a class="source" href="https://github.com/dj-fiorex/angular2-smart-table/blob/master/projects/demo/src/app/pages/examples/custom-edit-view/advanced-example-custom-editor.component.ts">example here</a>
+        You can see an <a class="source"
+          href="https://github.com/odisoedim/angular2-smart-table/blob/master/projects/demo/src/app/pages/examples/custom-edit-view/advanced-example-custom-editor.component.ts">example
+          here</a>
       </td>
     </tr>
     <tr>
@@ -201,7 +207,8 @@
       <td><span class="highlight">Function</span></td>
       <td>undefined</td>
       <td>
-        Takes a <span class="highlight">Row</span> object as input and produces a <span class="highlight">boolean</span>.<br>
+        Takes a <span class="highlight">Row</span> object as input and produces a <span
+          class="highlight">boolean</span>.<br>
         When true, the button will not be rendered.
       </td>
     </tr>
@@ -210,7 +217,8 @@
       <td><span class="highlight">Function</span></td>
       <td>undefined</td>
       <td>
-        Takes a <span class="highlight">Row</span> object as input and produces a <span class="highlight">boolean</span>.<br>
+        Takes a <span class="highlight">Row</span> object as input and produces a <span
+          class="highlight">boolean</span>.<br>
         When true, the button will not be clickable and receive the CSS class "not-allowed"
         which by default applies the <span class="highlight">cursor: not-allowed</span> style.
       </td>
@@ -229,7 +237,9 @@
       <td><span class="highlight">Function</span></td>
       <td>null</td>
       <td>
-        Function which will be invoked after <span class="highlight">renderComponent</span> instantiated and before ngOnInit hook. This function gets <span class="highlight">renderComponent</span> instance in first param and the <span class="highlight">ViewCell</span> as second param.
+        Function which will be invoked after <span class="highlight">renderComponent</span> instantiated and before
+        ngOnInit hook. This function gets <span class="highlight">renderComponent</span> instance in first param and the
+        <span class="highlight">ViewCell</span> as second param.
       </td>
     </tr>
     <tr>
@@ -245,7 +255,8 @@
       <td><span class="highlight">'text' | 'textarea' | 'completer' | 'list' | 'checkbox' | 'custom'</span></td>
       <td>'text'</td>
       <td>
-        Editor used when new row is added or edited. When <span class="highlight">custom</span> is selected, you need to specify
+        Editor used when new row is added or edited. When <span class="highlight">custom</span> is selected, you need to
+        specify
         <span class="highlight">editor.component</span>.
       </td>
     </tr>
@@ -262,7 +273,8 @@
       <td><span class="highlight">Object</span></td>
       <td>undefined</td>
       <td>
-        Editor configuration settings. Mandatory only for editor types <span class="highlight">completer</span>, <span class="highlight">list</span>
+        Editor configuration settings. Mandatory only for editor types <span class="highlight">completer</span>, <span
+          class="highlight">list</span>
       </td>
     </tr>
     <tr>
@@ -270,7 +282,8 @@
       <td><span class="highlight">boolean</span></td>
       <td>false</td>
       <td>
-        Only on editor types <span class="highlight">text</span>, <span class="highlight">textarea</span>, <span class="highlight">select</span>.<br>
+        Only on editor types <span class="highlight">text</span>, <span class="highlight">textarea</span>, <span
+          class="highlight">select</span>.<br>
         Whether hitting ENTER key should trigger saving.
       </td>
     </tr>
@@ -280,7 +293,8 @@
       <td>''</td>
       <td>
         Only on <span class="highlight">checkbox</span> type.<br>
-        Defines the value to assign when the checkbox is checked. This parameter is optional, if omitted, <code>true</code> will be used.
+        Defines the value to assign when the checkbox is checked. This parameter is optional, if omitted,
+        <code>true</code> will be used.
       </td>
     </tr>
     <tr>
@@ -289,7 +303,8 @@
       <td>''</td>
       <td>
         Only on <span class="highlight">checkbox</span> type.<br>
-        Defines the value to assign when the checkbox is not checked. This parameter is optional, if omitted, <code>false</code> will be used.
+        Defines the value to assign when the checkbox is not checked. This parameter is optional, if omitted,
+        <code>false</code> will be used.
       </td>
     </tr>
     <tr>
@@ -326,7 +341,8 @@
       <td><span class="highlight">string</span></td>
       <td>''</td>
       <td>
-        Comma separated list of fields to search on. Fields may contain dots for nested attributes; if empty or null all data will be returned
+        Comma separated list of fields to search on. Fields may contain dots for nested attributes; if empty or null all
+        data will be returned
       </td>
     </tr>
     <tr>
@@ -334,7 +350,7 @@
       <td><span class="highlight">string</span></td>
       <td>''</td>
       <td>
-       Name of the field to use as title for the list item
+        Name of the field to use as title for the list item
       </td>
     </tr>
     <tr>
@@ -350,11 +366,16 @@
       <td><span class="highlight">Object</span></td>
       <td>undefined</td>
       <td>
-        Column filter attributes settings. This object accepts the same properties as the <code>editor</code> object.<br>
-        The available types are: <code>checkbox</code>, <code>list</code>, <code>multiple</code>, <code>completer</code>, <code>date</code>.<br>
-        The <code>checkbox</code> type accepts one more optional property compared to the <code>editor</code> version: <span class="highlight">resetText: string</span>.
+        Column filter attributes settings. This object accepts the same properties as the <code>editor</code>
+        object.<br>
+        The available types are: <code>checkbox</code>, <code>list</code>, <code>multiple</code>,
+        <code>completer</code>, <code>date</code>.<br>
+        The <code>checkbox</code> type accepts one more optional property compared to the <code>editor</code> version:
+        <span class="highlight">resetText: string</span>.
         It defines the text of the button to reset the checkbox selection.<br>
-        <a class="source" href="https://github.com/dj-fiorex/angular2-smart-table/blob/master/projects/demo/src/app/pages/examples/filter/advanced-example-filters.component.ts">Click here to see an example</a> on how to configure the filters.
+        <a class="source"
+          href="https://github.com/odisoedim/angular2-smart-table/blob/master/projects/demo/src/app/pages/examples/filter/advanced-example-filters.component.ts">Click
+          here to see an example</a> on how to configure the filters.
       </td>
     </tr>
     <tr>
@@ -435,13 +456,16 @@
     </tr>
     <tr>
       <td>selectMode</td>
-      <td><span class="highlight">'single'</span>|<span class="highlight">'multi'</span>|<span class="highlight">'multi_filtered'</span></td>
+      <td><span class="highlight">'single'</span>|<span class="highlight">'multi'</span>|<span
+          class="highlight">'multi_filtered'</span></td>
       <td>'single'</td>
       <td>
         Determines if more than one row can be selected.<br>
         <span class="highlight">'single'</span> - just highlight the single selected row<br>
-        <span class="highlight">'multi'</span> - show a column with checkboxes for a multi-selection and "select all" selects all items<br>
-        <span class="highlight">'multi_filtered'</span> - show a column with checkboxes for a multi-selection and "select all" selects only all items wrt. the active filter<br>
+        <span class="highlight">'multi'</span> - show a column with checkboxes for a multi-selection and "select all"
+        selects all items<br>
+        <span class="highlight">'multi_filtered'</span> - show a column with checkboxes for a multi-selection and
+        "select all" selects only all items wrt. the active filter<br>
       </td>
     </tr>
     <tr>
@@ -615,7 +639,8 @@
       <td><span class="highlight">Function</span></td>
       <td>undefined</td>
       <td>
-        Takes a <span class="highlight">Row</span> object as input and produces a <span class="highlight">boolean</span>.<br>
+        Takes a <span class="highlight">Row</span> object as input and produces a <span
+          class="highlight">boolean</span>.<br>
         When true, the button will not be rendered.
       </td>
     </tr>
@@ -624,7 +649,8 @@
       <td><span class="highlight">Function</span></td>
       <td>undefined</td>
       <td>
-        Takes a <span class="highlight">Row</span> object as input and produces a <span class="highlight">boolean</span>.<br>
+        Takes a <span class="highlight">Row</span> object as input and produces a <span
+          class="highlight">boolean</span>.<br>
         When true, the button will not be clickable and receive the CSS class "not-allowed"
         which by default applies the <span class="highlight">cursor: not-allowed</span> style.
       </td>
@@ -683,7 +709,8 @@
       <td><span class="highlight">boolean</span></td>
       <td>false</td>
       <td>
-        Enable/disable <span class="highlight">(confirmEdit)</span> event. If enabled data will be edited only if confirm.resolve() called.
+        Enable/disable <span class="highlight">(confirmEdit)</span> event. If enabled data will be edited only if
+        confirm.resolve() called.
       </td>
     </tr>
     <tr>
@@ -691,7 +718,8 @@
       <td><span class="highlight">Function</span></td>
       <td>undefined</td>
       <td>
-        Takes a <span class="highlight">Row</span> object as input and produces a <span class="highlight">boolean</span>.<br>
+        Takes a <span class="highlight">Row</span> object as input and produces a <span
+          class="highlight">boolean</span>.<br>
         When true, the button will not be rendered.
       </td>
     </tr>
@@ -700,7 +728,8 @@
       <td><span class="highlight">Function</span></td>
       <td>undefined</td>
       <td>
-        Takes a <span class="highlight">Row</span> object as input and produces a <span class="highlight">boolean</span>.<br>
+        Takes a <span class="highlight">Row</span> object as input and produces a <span
+          class="highlight">boolean</span>.<br>
         When true, the button will not be clickable and receive the CSS class "not-allowed"
         which by default applies the <span class="highlight">cursor: not-allowed</span> style.
       </td>
@@ -759,7 +788,8 @@
       <td><span class="highlight">boolean</span></td>
       <td>false</td>
       <td>
-        Enable/disable <span class="highlight">(confirmCreate)</span> event. If enabled data will be added only if confirm.resolve() called.
+        Enable/disable <span class="highlight">(confirmCreate)</span> event. If enabled data will be added only if
+        confirm.resolve() called.
       </td>
     </tr>
     <tr>
@@ -811,7 +841,8 @@
       <td><span class="highlight">boolean</span></td>
       <td>false</td>
       <td>
-        Enable/disable <span class="highlight">(confirmDelete)</span> event. If enabled data will be deleted only if confirm.resolve() called.
+        Enable/disable <span class="highlight">(confirmDelete)</span> event. If enabled data will be deleted only if
+        confirm.resolve() called.
       </td>
     </tr>
     <tr>
@@ -819,7 +850,8 @@
       <td><span class="highlight">Function</span></td>
       <td>undefined</td>
       <td>
-        Takes a <span class="highlight">Row</span> object as input and produces a <span class="highlight">boolean</span>.<br>
+        Takes a <span class="highlight">Row</span> object as input and produces a <span
+          class="highlight">boolean</span>.<br>
         When true, the button will not be rendered.
       </td>
     </tr>
@@ -828,7 +860,8 @@
       <td><span class="highlight">Function</span></td>
       <td>undefined</td>
       <td>
-        Takes a <span class="highlight">Row</span> object as input and produces a <span class="highlight">boolean</span>.<br>
+        Takes a <span class="highlight">Row</span> object as input and produces a <span
+          class="highlight">boolean</span>.<br>
         When true, the button will not be clickable and receive the CSS class "not-allowed"
         which by default applies the <span class="highlight">cursor: not-allowed</span> style.
       </td>
@@ -907,7 +940,8 @@
       </td>
       <td>
         Fired once after the table grid is fully initialized.
-        The argument describes the data <em>set</em> the grid has created from the data <em>source</em> after applying the table settings.
+        The argument describes the data <em>set</em> the grid has created from the data <em>source</em> after applying
+        the table settings.
       </td>
     </tr>
     <tr>
@@ -972,11 +1006,13 @@
         <ul>
           <li>newData: <span class="highlight">Object</span> - data entered in a new row</li>
           <li>source: <span class="highlight">DataSource</span> - table data source</li>
-          <li>confirm: <span class="highlight">Deferred</span> - Deferred object with resolve(newData: Object) and reject() methods.</li>
+          <li>confirm: <span class="highlight">Deferred</span> - Deferred object with resolve(newData: Object) and
+            reject() methods.</li>
         </ul>
       </td>
       <td>
-        Triggered once a Create button clicked. Triggered only if table <strong>confirmCreate = true and mode = inline</strong>.
+        Triggered once a Create button clicked. Triggered only if table <strong>confirmCreate = true and mode =
+          inline</strong>.
         Allows you to confirm changes before they are applied to the table data source.
       </td>
     </tr>
@@ -1016,11 +1052,13 @@
           <li>data: <span class="highlight">Object</span> - original row data</li>
           <li>newData: <span class="highlight">Object</span> - edited data</li>
           <li>source: <span class="highlight">DataSource</span> - table data source</li>
-          <li>confirm: <span class="highlight">Deferred</span> - Deferred object with resolve(newData: Object) and reject() methods.</li>
+          <li>confirm: <span class="highlight">Deferred</span> - Deferred object with resolve(newData: Object) and
+            reject() methods.</li>
         </ul>
       </td>
       <td>
-        Triggered once a Save button clicked. Triggered only if table <strong>confirmSave = true and mode = inline</strong>.
+        Triggered once a Save button clicked. Triggered only if table <strong>confirmSave = true and mode =
+          inline</strong>.
         Allows you to confirm changes before they are applied to the table data source.
       </td>
     </tr>
@@ -1061,11 +1099,13 @@
           <li>row: <span class="highlight">Row</span> - the row that is supposed to be deleted</li>
           <li>data: <span class="highlight">Object</span> - data object to delete</li>
           <li>source: <span class="highlight">DataSource</span> - table data source</li>
-          <li>confirm: <span class="highlight">Deferred</span> - Deferred object with resolve() and reject() methods.</li>
+          <li>confirm: <span class="highlight">Deferred</span> - Deferred object with resolve() and reject() methods.
+          </li>
         </ul>
       </td>
       <td>
-        Triggered once a Delete button clicked. Triggered only if table <strong>confirmDelete = true and mode = inline</strong>.
+        Triggered once a Delete button clicked. Triggered only if table <strong>confirmDelete = true and mode =
+          inline</strong>.
         Allows you to confirm changes before they are applied to the table data source.
       </td>
     </tr>
@@ -1081,7 +1121,8 @@
         </ul>
       </td>
       <td>
-        Triggered once a custom action button clicked. There may be multiple custom actions that are distinguished by name.
+        Triggered once a custom action button clicked. There may be multiple custom actions that are distinguished by
+        name.
       </td>
     </tr>
   </table>
@@ -1099,7 +1140,8 @@
       <td>
         <ul>
           <li>index: <span class="highlight">number</span> - the row to select</li>
-          <li>switchPageToSelectedRowPage: <span class="highlight">boolean</span> - optional, override the respective table setting</li>
+          <li>switchPageToSelectedRowPage: <span class="highlight">boolean</span> - optional, override the respective
+            table setting</li>
         </ul>
       </td>
       <td>
@@ -1250,7 +1292,8 @@
             <ul>
               <li>field - <span class="highlight">string</span> - columnKey</li>
               <li>direction - <span class="highlight">string|null</span> - 'asc'|'desc'|null - sort direction</li>
-              <li>compare? - <span class="highlight">Function|null|undefined</span> - optional custom compare function</li>
+              <li>compare? - <span class="highlight">Function|null|undefined</span> - optional custom compare function
+              </li>
             </ul>
           </li>
           <li>
@@ -1261,7 +1304,8 @@
         </ul>
       </td>
       <td>
-        Updates the sorting configuration for the fields specified, leaving any other sorting configuration intact, example: <br>
+        Updates the sorting configuration for the fields specified, leaving any other sorting configuration intact,
+        example: <br>
         <code>this.source.updateSort([{{ '{' }} field: 'id', direction: 'asc' {{ '}' }}]);</code>
         <br>
         Note, that the latest added configuration will have the most significant sorting priority.
@@ -1287,7 +1331,8 @@
         </ul>
       </td>
       <td>
-        Replaces the entire sort configuration, removing anything that is not specified in the argument of this function.
+        Replaces the entire sort configuration, removing anything that is not specified in the argument of this
+        function.
         You should not use this function. Use <span class="highlight">updateSort</span>, instead.
       </td>
     </tr>
@@ -1313,7 +1358,8 @@
             </ul>
           </li>
           <li>
-            andOperator: <span class="highlight">boolean</span> - how to process multiple filters (as AND or as OR), default = true (AND)
+            andOperator: <span class="highlight">boolean</span> - how to process multiple filters (as AND or as OR),
+            default = true (AND)
           </li>
           <li>
             doEmit: <span class="highlight">boolean</span> - emit event (to refresh the table) or not, default = true.
@@ -1340,7 +1386,8 @@
             </ul>
           </li>
           <li>
-            andOperator: <span class="highlight">boolean</span> - how to process multiple filters (as AND or as OR), default = true (AND)
+            andOperator: <span class="highlight">boolean</span> - how to process multiple filters (as AND or as OR),
+            default = true (AND)
           </li>
           <li>
             doEmit: <span class="highlight">boolean</span> - emit event (to refresh the table) or not, default = true.
@@ -1363,7 +1410,8 @@
         Returns an <span class="highlight">Object</span> of the following form:
         <ul>
           <li>filters - <span class="highlight">Array</span> - array of filter objects (see above)</li>
-          <li>andOperator - <span class="highlight">boolean</span> - how the filters are combined (AND or OR), default = true (AND)</li>
+          <li>andOperator - <span class="highlight">boolean</span> - how the filters are combined (AND or OR), default =
+            true (AND)</li>
         </ul>
       </td>
     </tr>
@@ -1454,7 +1502,8 @@
       <td>reset</td>
       <td>
         <ul>
-          <li>silent: <span class="highlight">boolean</span> - if true - you have to additionally call `refresh` to reflect the changes</li>
+          <li>silent: <span class="highlight">boolean</span> - if true - you have to additionally call `refresh` to
+            reflect the changes</li>
         </ul>
       </td>
       <td>
@@ -1476,9 +1525,9 @@
         none
       </td>
       <td>
-          Returns the total number of elements with respect to the current filter.
-          If you want to find the overall total number of elements, use getAll() and
-          obtain the length - but keep in mind that this might be a costly operation.
+        Returns the total number of elements with respect to the current filter.
+        If you want to find the overall total number of elements, use getAll() and
+        obtain the length - but keep in mind that this might be a costly operation.
       </td>
     </tr>
     <tr>

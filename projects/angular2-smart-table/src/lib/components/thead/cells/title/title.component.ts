@@ -1,8 +1,7 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {Subscription} from 'rxjs';
-
-import {DataSource} from '../../../../lib/data-source/data-source';
-import {Column} from '../../../../lib/data-set/column';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { DataSource } from '../../../../lib/data-source/data-source';
+import { Column } from '../../../../lib/data-set/column';
 
 @Component({
   selector: 'angular2-smart-table-title',
@@ -11,7 +10,7 @@ import {Column} from '../../../../lib/data-set/column';
     <a href="#" *ngIf="column.isSortable"
        (click)="_sort($event)"
        class="angular2-smart-sort-link sort"
-       [ngClass]="currentDirection??''">
+       [ngClass]="currentDirection ?? ''">
       {{ column.title }}
     </a>
     <span class="angular2-smart-sort" *ngIf="!column.isSortable">{{ column.title }}</span>
@@ -22,7 +21,7 @@ import {Column} from '../../../../lib/data-set/column';
 })
 export class TitleComponent implements OnChanges {
 
-  currentDirection: 'asc'|'desc'|null = null;
+  currentDirection: 'asc' | 'desc' | null = null;
   @Input() column!: Column;
   @Input() source!: DataSource;
   @Input() isHideable!: boolean;
@@ -38,12 +37,6 @@ export class TitleComponent implements OnChanges {
       this.dataChangedSub = this.source.onChanged().subscribe((dataChanges) => {
         this.currentDirection = null;
         const sortConf = this.source.getSort();
-      
-        if (sortConf.length > 0 && sortConf[0]['field'] === this.column.id) {
-          this.currentDirection = sortConf[0]['direction'];
-        } else {
-          this.currentDirection = null;
-        }
         if (sortConf) {
           sortConf.forEach(c => {
             if (c.field === this.column.id) {
@@ -57,32 +50,39 @@ export class TitleComponent implements OnChanges {
 
   _sort(event: any) {
     event.preventDefault();
+    this.resetOtherSortDirections();
     this.changeSortDirection();
     this.source.updateSort([
       {
         field: this.column.id,
         direction: this.currentDirection,
-        compare: this.column.getCompareFunction(),
+        compare: this.column.compareFunction,
       },
     ]);
-    this.hide.emit(null);
-  
   }
-
 
   _hideColumnClicked(event: any) {
     event.preventDefault();
     this.hide.emit(this.column.id);
   }
 
-
-  changeSortDirection(): any {
-    if (this.currentDirection) {
-      const newDirection = this.currentDirection === 'asc' ? 'desc' : 'asc';
-      this.currentDirection = newDirection;
-    } else {
-      this.currentDirection = this.column.sortDirection;
+  private changeSortDirection(): void {
+    if (this.currentDirection === null) {
+      this.currentDirection = 'asc';
+    } else if (this.currentDirection === 'asc') {
+      this.currentDirection = 'desc';
+    } else if (this.currentDirection === 'desc') {
+      this.currentDirection = null;
     }
-    
+  }
+
+  private resetOtherSortDirections(): void {
+    const sortConf = this.source.getSort();
+    sortConf.forEach(c => {
+      if (c.field !== this.column.id) {
+        c.direction = null;
+      }
+    });
+    this.source.setSort(sortConf);
   }
 }

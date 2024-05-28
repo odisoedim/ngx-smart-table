@@ -1,17 +1,17 @@
 {
   "name": "@odiso/angular2-smart-table",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Angular 2 Smart Table",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dj-fiorex/angular2-smart-table"
+    "url": "git+https://github.com/odisoedim/angular2-smart-table"
   },
-  "author": "dj-fiorex",
+  "author": "odisoedim",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dj-fiorex/angular2-smart-table/issues"
+    "url": "https://github.com/odisoedim/angular2-smart-table/issues"
   },
-  "homepage": "https://github.com/dj-fiorex/angular2-smart-table#readme",
+  "homepage": "https://github.com/odisoedim/angular2-smart-table#readme",
   "peerDependencies": {
     "@angular/core": "13 - 15",
     "@angular/common": "13 - 15",
