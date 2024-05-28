@@ -38,6 +38,12 @@ export class TitleComponent implements OnChanges {
       this.dataChangedSub = this.source.onChanged().subscribe((dataChanges) => {
         this.currentDirection = null;
         const sortConf = this.source.getSort();
+      
+        if (sortConf.length > 0 && sortConf[0]['field'] === this.column.id) {
+          this.currentDirection = sortConf[0]['direction'];
+        } else {
+          this.currentDirection = null;
+        }
         if (sortConf) {
           sortConf.forEach(c => {
             if (c.field === this.column.id) {
@@ -56,9 +62,11 @@ export class TitleComponent implements OnChanges {
       {
         field: this.column.id,
         direction: this.currentDirection,
-        compare: this.column.compareFunction,
+        compare: this.column.getCompareFunction(),
       },
     ]);
+    this.hide.emit(null);
+  
   }
 
 
@@ -68,14 +76,13 @@ export class TitleComponent implements OnChanges {
   }
 
 
-  private changeSortDirection(): void {
-    // rotate sort direction, including null (no sort)
-    if (this.currentDirection === null) {
-      this.currentDirection = 'asc';
-    } else if (this.currentDirection === 'asc') {
-      this.currentDirection = 'desc';
-    } else if (this.currentDirection === 'desc') {
-      this.currentDirection = null;
+  changeSortDirection(): any {
+    if (this.currentDirection) {
+      const newDirection = this.currentDirection === 'asc' ? 'desc' : 'asc';
+      this.currentDirection = newDirection;
+    } else {
+      this.currentDirection = this.column.sortDirection;
     }
+    
   }
 }

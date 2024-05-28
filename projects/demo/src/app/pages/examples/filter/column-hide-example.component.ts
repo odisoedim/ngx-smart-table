@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {Settings} from 'angular2-smart-table';
+import { Component } from '@angular/core';
+import { Settings } from 'angular2-smart-table';
 
 @Component({
   selector: 'column-hide-example',
@@ -69,10 +69,39 @@ export class ColumnHideExampleComponent {
       },
       name: {
         title: 'Full Name',
+        filter: {
+          type: 'multiple',
+          config: {
+            selectedItems: [],
+            dropdownSettings: {
+              singleSelection: false,
+              text: "Select",
+              selectAllText: "Select All",
+              unSelectAllText: 'UnSelect All',
+              enableSearchFilter: true,
+              classes: ""
+            },
+            dropdownList: [
+              { id: 'Glenna Reichert', itemName: 'Glenna Reichert' },
+              { id: 'Kurtis Weissnat', itemName: 'Kurtis Weissnat' },
+              { id: 'Chelsey Dietrich', itemName: 'Chelsey Dietrich' },
+            ],
+          },
+        },
       },
       email: {
         title: 'Email',
         hide: true,
+        filter: {
+          type: 'completer',
+          config: {
+            completer: {
+              data: this.data,
+              searchFields: 'email',
+              titleField: 'email',
+            },
+          },
+        },
       },
       passed: {
         title: 'Passed',

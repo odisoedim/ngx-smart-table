@@ -23,7 +23,6 @@ import {
   EditConfirmEvent,
   EditEvent
 } from '../../lib/events';
-import {RowClassFunction} from "../../lib/settings";
 
 @Component({
   selector: '[angular2-st-tbody]',
@@ -37,7 +36,7 @@ export class NgxSmartTableTbodyComponent implements AfterViewInit, OnDestroy {
   @Input() deleteConfirm!: EventEmitter<DeleteConfirmEvent>;
   @Input() editConfirm!: EventEmitter<EditConfirmEvent>;
   @Input() editCancel!: EventEmitter<EditCancelEvent>;
-  @Input() rowClassFunction!: RowClassFunction;
+  @Input() rowClassFunction!: Function;
 
   @Output() edit = new EventEmitter<EditEvent>();
   @Output() delete = new EventEmitter<DeleteEvent>();
@@ -88,7 +87,7 @@ export class NgxSmartTableTbodyComponent implements AfterViewInit, OnDestroy {
   showActionColumnRight!: boolean;
   mode!: string;
   editInputClass!: string;
-  noDataMessage!: string;
+  noDataMessage!: boolean;
 
   get tableColumnsCount() {
     const actionColumn = (this.showActionColumnLeft || this.showActionColumnRight) ? 1 : 0;
@@ -99,10 +98,10 @@ export class NgxSmartTableTbodyComponent implements AfterViewInit, OnDestroy {
   ngOnChanges() {
     this.isMultiSelectVisible = this.grid.isMultiSelectVisible();
     this.showActionColumnLeft = this.grid.showActionColumn('left');
-    this.mode = this.grid.settings.mode ?? 'inline';
-    this.editInputClass = this.grid.settings.edit?.inputClass ?? '';
+    this.mode = this.grid.getSetting('mode');
+    this.editInputClass = this.grid.getSetting('edit.inputClass');
     this.showActionColumnRight = this.grid.showActionColumn('right');
-    this.noDataMessage = this.grid.settings.noDataMessage!;
+    this.noDataMessage = this.grid.getSetting('noDataMessage');
   }
 
   getVisibleCells(cells: Array<Cell>): Array<Cell> {

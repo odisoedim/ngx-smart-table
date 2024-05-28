@@ -1,7 +1,7 @@
 <h2>Customized edit and view cells examples</h2>
-<h3>Select and Textarea column types</h3>
+<h3>Select, Completer and Textarea column types</h3>
 <p>
-  An example on how to use select and textarea column types and use CSS classes to influence rendering:
+  An example on how to use select, completer, textarea column types and use CSS classes to influence rendering:
 </p>
 <div class="with-source">
   <a class="source" href="https://github.com/dj-fiorex/angular2-smart-table/blob/master/projects/demo/src/app/pages/examples/custom-edit-view/advanced-example-types.component.ts" target="_blank">Demo Source</a>
@@ -15,24 +15,13 @@
 </div>
 <p>When implementing a custom editor or renderer remember to add it to the <code>entryComponents</code> and to the <code>declarations</code> part of your module</p>
 <pre>
-  <code highlight class="typescript">
-&commat;NgModule(&lbrace;
-    imports: [
-      // ...
-    ],
-    entryComponents: [CustomEditorComponent, CustomRenderComponent],
-    declarations: [
-      // ...
-      CustomEditorComponent,
-      CustomRenderComponent,
-    ],
-&rbrace;)</code>
+  <code highlight class="typescript">{{ snippets.customEditorModule }}</code>
 </pre>
 <p>
   <b>For the custom cell editor:</b><br>
   To inherit the methods needed to interact with the table you can either extend the component with the <code>DefaultEditor</code> class or implement the <code>Editor</code> interface and reproduce the same methods on your component.<br>
   <b>For the custom cell renderer:</b><br>
-  In this example the custom component is applying a <code>.toUpperCase()</code> to one of the columns.
+  In this example the custom component is applying a <code>.toUpperCase()</code> to one of the columns. You can implement the ViewCell interface to make sure you are setting up your component correctly.
 </p>
 
 <h3>
@@ -46,9 +35,9 @@
 </div>
 
 <h3>
-  Expand Row / Hide Columns
+  Expand Row
 </h3>
-<p>An example on how to expand/collapse rows and hide/show columns:</p>
+<p>An example on how to use Expand row view:</p>
 <div class="with-source">
   <a class="source" href="https://github.com/dj-fiorex/angular2-smart-table/blob/master/projects/demo/src/app/pages/examples/custom-edit-view/row-expand-example.ts"
     target="_blank">Demo Source</a>

@@ -34,7 +34,7 @@ export class CellComponent {
 
   onEdited() {
     if (this.isNew) {
-      this.grid.create(this.grid.createFormRow, this.createConfirm);
+      this.grid.create(this.grid.getNewRow(), this.createConfirm);
     } else {
       this.grid.save(this.row, this.editConfirm);
     }
@@ -44,7 +44,7 @@ export class CellComponent {
     if (this.isNew) {
       this.grid.createFormShown = false;
       this.createCancel.emit({
-        discardedData: this.grid.createFormRow.getNewData(),
+        discardedData: this.grid.getNewRow().getNewData(),
         source: this.grid.source,
       });
     } else {

@@ -39,8 +39,7 @@ export class TbodyCustomComponent {
   @Output() custom = new EventEmitter<CustomActionEvent>();
 
   get customActions(): CustomAction[] {
-    if (this.grid.settings.actions === false) return [];
-    return this.grid.settings.actions?.custom ?? [];
+    return this.grid.getSetting('actions.custom') ?? [];
   }
 
   buttonContent(action: CustomAction): string {

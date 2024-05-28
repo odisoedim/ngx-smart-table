@@ -1,9 +1,9 @@
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
-import {CustomEditorComponent} from './custom-editor.component';
-import {CustomRenderComponent} from './custom-render.component';
-import {CustomFilterComponent} from './custom-filter.component';
-import {Settings} from "angular2-smart-table";
+import { CustomEditorComponent } from './custom-editor.component';
+import { CustomRenderComponent } from './custom-render.component';
+import { CustomFilterComponent } from './custom-filter.component';
+import { IColumnType } from 'projects/angular2-smart-table/src/public-api';
 
 @Component({
   selector: 'advanced-example-custom-editor',
@@ -40,11 +40,11 @@ export class AdvancedExamplesCustomEditorComponent {
     },
   ];
 
-  settings: Settings = {
+  settings = {
     columns: {
       id: {
         title: 'ID',
-        type: 'text',
+        type: IColumnType.Text,
         filter: {
           type: 'custom',
           component: CustomFilterComponent
@@ -52,17 +52,16 @@ export class AdvancedExamplesCustomEditorComponent {
       },
       name: {
         title: 'Full Name',
-        type: 'custom',
+        type: IColumnType.Custom,
         renderComponent: CustomRenderComponent,
-        componentInitFunction: CustomRenderComponent.componentInit,
       },
       username: {
         title: 'User Name',
-        type: 'text',
+        type: IColumnType.Text,
       },
       link: {
         title: 'Link',
-        type: 'html',
+        type: IColumnType.Html,
         editor: {
           type: 'custom',
           component: CustomEditorComponent,

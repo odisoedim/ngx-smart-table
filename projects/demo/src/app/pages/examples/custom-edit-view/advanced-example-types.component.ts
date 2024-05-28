@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {Settings} from "angular2-smart-table";
+import { Component } from '@angular/core';
+import { IColumnType, Settings } from 'angular2-smart-table';
 
 @Component({
   selector: 'advanced-example-types',
@@ -128,19 +128,30 @@ export class AdvancedExamplesTypesComponent {
     columns: {
       id: {
         title: 'ID',
-        type: 'text',
+        type: IColumnType.Text,
       },
       name: {
         title: 'Full Name',
-        type: 'text',
+        type: IColumnType.Text,
+        editor: {
+          type: 'completer',
+          config: {
+            completer: {
+              data: this.data,
+              searchFields: 'name',
+              titleField: 'name',
+              descriptionField: 'email',
+            },
+          },
+        },
       },
       username: {
         title: 'User Name',
-        type: 'html',
+        type: IColumnType.Html,
       },
       job: {
         title: 'Job',
-        type: 'text',
+        type: IColumnType.Text,
         editor: {
           type: 'list',
           config: {
@@ -154,11 +165,11 @@ export class AdvancedExamplesTypesComponent {
       },
       email: {
         title: 'Email',
-        type: 'text',
+        type: IColumnType.Text,
       },
       comments: {
         title: 'Comments',
-        type: 'text',
+        type: IColumnType.Text,
         classContent: 'with-ellipsis',
         editor: {
           type: 'textarea',
@@ -166,7 +177,7 @@ export class AdvancedExamplesTypesComponent {
       },
       passed: {
         title: 'Passed',
-        type: 'text',
+        type: IColumnType.Text,
         editor: {
           type: 'checkbox',
           config: {

@@ -38,7 +38,7 @@ export class Row {
 
   getNewData(): any {
     const values = Object.assign({}, this.data);
-    this.getCells().forEach((cell) => values[cell.getColumn().id] = cell.getNewRawValue());
+    this.getCells().forEach((cell) => values[cell.getColumn().id] = cell.newValue);
     return values;
   }
 
@@ -50,7 +50,14 @@ export class Row {
   process() {
     this.cells = [];
     this._dataSet.getColumns().forEach((column: Column) => {
-      this.cells.push(new Cell(this.data[column.id], this, column));
+      const cell = this.createCell(column);
+      this.cells.push(cell);
     });
+  }
+
+  createCell(column: Column): Cell {
+    const defValue = (column as any).settings.defaultValue ? (column as any).settings.defaultValue : '';
+    const value = typeof this.data[column.id] === 'undefined' ? defValue : this.data[column.id];
+    return new Cell(value, this, column, this._dataSet);
   }
 }

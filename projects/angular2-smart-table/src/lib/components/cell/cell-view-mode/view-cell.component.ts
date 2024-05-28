@@ -23,6 +23,6 @@ export class ViewCellComponent {
   }
 
   get cssClass(): string {
-    return this.cell.getColumn().classContent;
+    return this.cell.getColumn().classContent ?? ''
   }
 }

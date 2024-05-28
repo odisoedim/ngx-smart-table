@@ -11,7 +11,7 @@ export class DefaultFilter implements Filter, OnDestroy {
   delay: number = 300;
   changesSubscription!: Subscription;
   changesSubscription2!: Subscription;
-  @Input() query: string = '';
+  @Input() query!: string;
   @Input() inputClass!: string;
   @Input() column!: Column;
   @Output() filter = new EventEmitter<string>();

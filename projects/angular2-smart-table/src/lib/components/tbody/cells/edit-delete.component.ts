@@ -46,7 +46,7 @@ export class TbodyEditDeleteComponent implements OnChanges {
 
     this.editRowSelect.emit(this.row);
 
-    if (this.grid.settings.mode === 'external') {
+    if (this.grid.getSetting('mode') === 'external') {
       this.edit.emit({
         row: this.row,
         data: this.row.getData(),
@@ -62,7 +62,7 @@ export class TbodyEditDeleteComponent implements OnChanges {
     event.stopPropagation();
     if (this.deleteDisabled) return;
 
-    if (this.grid.settings.mode === 'external') {
+    if (this.grid.getSetting('mode') === 'external') {
       this.delete.emit({
         row: this.row,
         data: this.row.getData(),

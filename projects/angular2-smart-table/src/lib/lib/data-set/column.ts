@@ -1,11 +1,6 @@
 import {
-  ColumnCompareFunction,
-  ColumnComponentInitFunction,
   ColumnFilterFunction,
   ColumnValuePrepareFunction,
-  ColumnValueStoreFunction,
-  EditorSettings,
-  FilterSettings,
   IColumn,
   IColumnType,
   ISortDirection,
@@ -13,16 +8,16 @@ import {
 } from '../settings';
 import {DataSet} from './data-set';
 
-export class Column {
+export class Column implements IColumn {
 
   placeholder?: string;
-  title: string;
-  hide: boolean;
-  type: IColumnType;
-  sanitizer: SanitizerSettings;
-  classHeader: string;
-  classContent: string;
-  width: string;
+  title: string = '';
+  hide: boolean = false;
+  type?: IColumnType = IColumnType.Text;
+  sanitizer: SanitizerSettings = {};
+  classHeader?: string = '';
+  classContent?: string = '';
+  width?: string = '';
   /**
    * If this column was resized, this contains the new width in pixels.
    * Please be aware that this only contains the width specified in the width
@@ -33,48 +28,102 @@ export class Column {
    * reflected by this property.
    */
   resizedWidth?: number = undefined;
-  isSortable: boolean;
-  isEditable: boolean;
-  isAddable: boolean;
+  isSortable?: boolean = true;
+  isEditable?: boolean = true;
+  isAddable?: boolean = true;
   isFilterable?: boolean = false;
-  defaultSortDirection: ISortDirection;
-  editor: EditorSettings;
-  filter: FilterSettings;
-  renderComponent?: any;
-  compareFunction?: ColumnCompareFunction;
+  sortDirection: ISortDirection = 'asc';
+  defaultSortDirection?: ISortDirection = undefined;
+  editor?: { type: string, config: any, component: any } = {type: '', config: {}, component: null};
+  filter?: { type: string, config: any, component: any } = {type: '', config: {}, component: null};
+  renderComponent?: any = null;
+  compareFunction?: Function;
   valuePrepareFunction?: ColumnValuePrepareFunction;
-  valueStoreFunction?: ColumnValueStoreFunction;
   filterFunction?: ColumnFilterFunction;
-  componentInitFunction?: ColumnComponentInitFunction;
+  onComponentInitFunction?: Function;
 
-  constructor(public id: string, protected settings: IColumn, protected dataSet: DataSet) {
-    this.type = this.settings.type ?? 'text';
-    this.placeholder = this.settings.placeholder;
-    this.sanitizer = this.settings.sanitizer ?? {};
-    this.title = this.settings.title ?? '';
-    this.classHeader = this.settings.classHeader ?? '';
-    this.classContent = this.settings.classContent ?? '';
-    this.width = this.settings.width ?? 'auto';
-    this.hide = this.settings.hide ?? false;
-    this.editor = this.settings.editor ?? {type: 'text'};
-    this.filter = this.settings.filter ?? {type: 'text'};
-    this.renderComponent = this.settings.renderComponent;
+  constructor(public id: string, protected settings: any, protected dataSet: DataSet) {
+    this.process();
+  }
 
-    this.isFilterable = this.settings.isFilterable ?? true;
-    this.isSortable = this.settings.isSortable ?? true;
-    this.isEditable = this.settings.isEditable ?? true;
-    this.isAddable = this.settings.isAddable ?? true;
+  getOnComponentInitFunction(): Function | undefined {
+    return this.onComponentInitFunction;
+  }
 
-    this.defaultSortDirection = this.settings.sortDirection ?? null;
+  getCompareFunction(): Function | undefined {
+    return this.compareFunction;
+  }
 
-    this.compareFunction = this.settings.compareFunction;
-    this.valuePrepareFunction = this.settings.valuePrepareFunction;
-    this.valueStoreFunction = this.settings.valueStoreFunction;
-    this.filterFunction = this.settings.filterFunction;
-    this.componentInitFunction = this.settings.componentInitFunction;
+  getValuePrepareFunction(): Function | undefined {
+    return this.valuePrepareFunction;
+  }
+
+  getFilterFunction(): Function | undefined {
+    return this.filterFunction;
   }
 
   getConfig(): any {
     return this.editor && this.editor.config;
+  }
+
+  getFilterType(): any {
+    return this.filter && this.filter.type;
+  }
+
+  getFilterConfig(): any {
+    return this.filter && this.filter.config;
+  }
+
+  /**
+   * Retrieves a setting by name.
+   *
+   * @param key the current key name
+   * @param compatKeys key names for backwards compatibility
+   * @private
+   */
+  private lookupSetting<T>(key: string, compatKeys: string[] = []): T | undefined {
+    if (typeof this.settings[key] === undefined) {
+      for (const k of compatKeys) {
+        if (typeof this.settings[k] !== undefined) {
+          return this.settings[k];
+        }
+      }
+      return undefined;
+    } else {
+      return this.settings[key] as T;
+    }
+  }
+
+  protected process() {
+    // the pattern is "X = lookup(key) ?? X" - this keeps the default value in case the setting is undefined
+
+    this.placeholder = this.lookupSetting('placeholder');
+    this.sanitizer = this.lookupSetting('sanitizer') ?? {};
+    this.title = this.lookupSetting('title') ?? this.title;
+    this.classHeader = this.lookupSetting('classHeader', ['class']) ?? this.classHeader;
+    this.classContent = this.lookupSetting('classContent', ['class']) ?? this.classContent;
+    this.width = this.lookupSetting('width') ?? this.width;
+    this.hide = this.lookupSetting('hide') ?? this.hide;
+    this.type = this.lookupSetting('type') ?? this.determineType();
+    this.editor = this.lookupSetting('editor') ?? this.editor;
+    this.filter = this.lookupSetting('filter') ?? this.filter;
+    this.renderComponent = this.lookupSetting('renderComponent') ?? this.renderComponent;
+
+    this.isFilterable = this.filter !== undefined && !!this.filter;
+    this.isSortable = this.lookupSetting('isSortable', ['sort']) ?? this.isSortable;
+    this.isEditable = this.lookupSetting('isEditable', ['editable']) ?? this.isEditable;
+    this.isAddable = this.lookupSetting('isAddable') ?? this.isAddable;
+    this.defaultSortDirection = this.lookupSetting('sortDirection') ?? this.defaultSortDirection;
+    this.sortDirection = this.defaultSortDirection ?? this.sortDirection;
+
+    this.compareFunction = this.lookupSetting('compareFunction');
+    this.valuePrepareFunction = this.lookupSetting('valuePrepareFunction');
+    this.filterFunction = this.lookupSetting('filterFunction');
+    this.onComponentInitFunction = this.lookupSetting('onComponentInitFunction');
+  }
+
+  determineType(): IColumnType {
+    // TODO: determine type by data
+    return IColumnType.Text;
   }
 }

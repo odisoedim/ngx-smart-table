@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
-import {LocalDataSource, Settings} from 'angular2-smart-table';
+import { LocalDataSource } from 'angular2-smart-table';
 
 @Component({
   selector: 'basic-example-source',
@@ -11,23 +11,23 @@ import {LocalDataSource, Settings} from 'angular2-smart-table';
 })
 export class BasicExampleSourceComponent {
 
-  settings: Settings = {
+  settings = {
     columns: {
       id: {
         title: 'ID',
-        isFilterable: false,
+        filter: false,
       },
       name: {
         title: 'Full Name',
-        isFilterable: false,
+        filter: false,
       },
       username: {
         title: 'User Name',
-        isFilterable: false,
+        filter: false,
       },
       email: {
         title: 'Email',
-        isFilterable: false,
+        filter: false,
       },
     },
   };

@@ -1,18 +1,22 @@
 import {Row} from './row';
 import {Column} from './column';
-import {IColumns} from "../settings";
 
 export class DataSet {
+
+  newRow!: Row;
+
   protected data: Array<Row> = [];
   protected columns: Array<Column> = [];
   protected rows: Array<Row> = [];
-  protected selectedRow: Row | null = null;
+  protected selectedRow?: Row;
   protected expandedRow?: Row;
-  protected willSelect: 'first' | 'last' | 'indexed' = 'indexed';
+  protected willSelect: string = '';
 
-  constructor(data: Array<any> = [], protected columnSettings: IColumns) {
+  constructor(data: Array<any> = [], protected columnSettings: Object) {
     this.createColumns(columnSettings);
     this.setData(data);
+
+    this.createNewRow();
   }
 
   setData(data: Array<any>, selectedRows: Array<any> = []) {
@@ -36,7 +40,11 @@ export class DataSet {
     return this.expandedRow;
   }
 
-  getSelectedRow(): Row | null {
+  getSelectedRow(): Row {
+    if (!this.selectedRow) {
+      console.warn('Selected row not found');
+      throw new Error('Selected row not found');
+    }
     return this.selectedRow;
   }
 
@@ -66,7 +74,7 @@ export class DataSet {
       row.isSelected = false;
     });
     // we need to clear selectedRow field because no one row selected
-    this.selectedRow = null;
+    this.selectedRow = undefined;
   }
 
   clearExpandAll() {
@@ -101,7 +109,7 @@ export class DataSet {
     return this.expandedRow;
   }
 
-  selectPreviousRow(): Row | null {
+  selectPreviousRow(): Row {
     if (this.rows.length > 0) {
       let index = this.selectedRow ? this.selectedRow.index : 0;
       if (index > this.rows.length - 1) {
@@ -109,27 +117,38 @@ export class DataSet {
       }
       this.selectRow(this.rows[index]);
       return this.getSelectedRow();
-    } else {
-      return null;
     }
+    throw new Error('There are no rows inside the data table');
   }
 
-  selectFirstRow(): Row | null{
+  selectFirstRow(): Row {
     if (this.rows.length > 0) {
       this.selectRow(this.rows[0]);
       return this.getSelectedRow();
-    } else {
-      return null;
     }
+    throw new Error('There are no rows inside the data table');
   }
 
-  selectLastRow(): Row | null {
+  selectLastRow(): Row {
     if (this.rows.length > 0) {
       this.selectRow(this.rows[this.rows.length - 1]);
       return this.getSelectedRow();
-    } else {
-      return null;
     }
+    throw new Error('There are no rows inside the data table');
+  }
+
+  selectRowByIndex(index?: number): void {
+    const rowsLength: number = this.rows.length;
+    if (rowsLength === 0) {
+      throw new Error('There are no rows inside the data table');
+    }
+    if (!index) {
+      this.selectFirstRow();
+    } else if (index > 0 && index < rowsLength) {
+      this.selectRow(this.rows[index]);
+    } else
+      // we need to deselect all rows if we got an incorrect index
+      this.deselectAll();
   }
 
   willSelectFirstRow() {
@@ -140,29 +159,28 @@ export class DataSet {
     this.willSelect = 'last';
   }
 
-  select(index: number): Row | null {
-    if (index >= 0 && this.getRows().length === 0) {
-      return null;
+  select(selectedRowIndex?: number): Row | null {
+    if (this.getRows().length === 0) {
+      throw new Error('There are no rows inside the data table');
     }
-    const willSelect = this.willSelect;
-    this.willSelect = 'indexed';
-    if (willSelect === 'indexed') {
-      if (index >= 0 && index < this.rows.length) {
-        this.selectRow(this.rows[index]);
-        return this.selectedRow;
-      } else {
-        // we need to deselect all rows if we got an incorrect index
-        this.deselectAll();
-        return null;
+    if (this.willSelect) {
+      if (this.willSelect === 'first') {
+        this.selectFirstRow();
       }
-    } else if (willSelect === 'first') {
-      return this.selectFirstRow();
-    } else if (willSelect === 'last') {
-      return this.selectLastRow();
+      if (this.willSelect === 'last') {
+        this.selectLastRow();
+      }
+      this.willSelect = '';
     } else {
-      // this branch is unreachable, because the if-else is exhaustive, but stupid typescript compilers do not see that
-      return null;
+      this.selectRowByIndex(selectedRowIndex);
     }
+
+    return this.selectedRow ?? null;
+  }
+
+  createNewRow() {
+    this.newRow = new Row(-1, {}, this);
+    this.newRow.isInEditing = true;
   }
 
   /**
@@ -170,7 +188,7 @@ export class DataSet {
    * @param settings
    * @private
    */
-  createColumns(settings: IColumns) {
+  createColumns(settings: any) {
     for (const id in settings) {
       if (settings.hasOwnProperty(id)) {
         this.columns.push(new Column(id, settings[id], this));

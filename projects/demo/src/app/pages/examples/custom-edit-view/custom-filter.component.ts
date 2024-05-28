@@ -28,8 +28,8 @@ export class CustomFilterComponent extends DefaultFilter implements OnInit, OnCh
         distinctUntilChanged(),
         debounceTime(this.delay),
       )
-      .subscribe(value => {
-        this.query = value;
+      .subscribe((value: number) => {
+        this.query = value !== null ? this.inputControl.value.toString() : '';
         this.setFilter();
       });
   }

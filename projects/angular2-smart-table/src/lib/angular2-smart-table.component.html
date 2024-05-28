@@ -1,6 +1,5 @@
-<ng-container *ngIf="grid !== undefined">
-<angular2-smart-table-tags-list *ngIf="isTagListShown"
-  [tags]="notVisibleColumnTagsList" (close)="onShowColumn($event)"
+<angular2-smart-table-tags-list
+  [tags]="getNotVisibleColumns()" (close)="onShowHeader($event)"
 ></angular2-smart-table-tags-list>
 
 <div style="overflow-x: auto; -webkit-overflow-scrolling: touch">
@@ -15,7 +14,7 @@
       [createCancel]="createCancel"
       (create)="create.emit($event)"
       (selectAllRows)="onSelectAllRows()"
-      (hide)="onHideColumn($event)"
+      (hide)="onHideHeader($event)"
     ></thead>
 
     <tbody
@@ -44,4 +43,3 @@
   [perPageSelectLabel]="perPageSelectLabel"
 >
 </angular2-smart-table-pager>
-</ng-container>

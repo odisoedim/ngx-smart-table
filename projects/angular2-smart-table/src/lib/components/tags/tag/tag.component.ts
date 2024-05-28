@@ -1,22 +1,19 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 
-export interface TagsListEntry {
-  key: string;
-  value: string;
-}
 
 @Component({
     selector: 'angular2-smart-table-tag',
+    styleUrls: ['./tag.component.scss'],
     templateUrl: './tag.component.html',
 })
 export class TagComponent {
 
-    @Input() item!: TagsListEntry;
+    @Input() item!: any;
 
-    @Output() close = new EventEmitter<string>();
+    @Output() close = new EventEmitter<any>();
 
     closeClicked(evt: Event) {
         evt.stopPropagation();
-        this.close.emit(this.item.key);
+        this.close.emit(this.item.id);
     }
 }

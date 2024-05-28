@@ -1,4 +1,4 @@
-settings: Settings = {
+settings = {
   columns: {
     id: {
       title: 'ID'

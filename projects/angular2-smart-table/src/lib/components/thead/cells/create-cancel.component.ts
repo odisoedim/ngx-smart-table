@@ -27,7 +27,7 @@ export class TheadCreateCancelComponent implements OnChanges {
   onCreate(event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
-    this.grid.create(this.grid.createFormRow, this.createConfirm);
+    this.grid.create(this.grid.getNewRow(), this.createConfirm);
   }
 
   onCancelCreate(event: MouseEvent) {
@@ -35,15 +35,14 @@ export class TheadCreateCancelComponent implements OnChanges {
     event.stopPropagation();
     this.grid.createFormShown = false;
     this.createCancel.emit({
-      discardedData: this.grid.createFormRow.getNewData(),
+      discardedData: this.grid.getNewRow().getNewData(),
       source: this.grid.source,
     });
   }
 
   ngOnChanges() {
-    // we can assume that default settings have been applied and all values are defined
-    this.createButtonContent = this.grid.settings.add!.createButtonContent!;
-    this.cancelButtonContent = this.grid.settings.add!.cancelButtonContent!;
+    this.createButtonContent = this.grid.getSetting('add.createButtonContent');
+    this.cancelButtonContent = this.grid.getSetting('add.cancelButtonContent');
     this.bypassSecurityTrust = this.grid.settings.add?.sanitizer?.bypassHtml ? 'html' : 'none';
   }
 }

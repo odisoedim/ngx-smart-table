@@ -29,8 +29,8 @@ export class NgxSmartTableTheadComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    this.isHideHeader = this.grid.settings.hideHeader ?? false;
-    this.isHideSubHeader = this.grid.settings.hideSubHeader ?? false;
+    this.isHideHeader = this.grid.getSetting('hideHeader');
+    this.isHideSubHeader = this.grid.getSetting('hideSubHeader');
   }
 
   @HostListener('mousemove', ['$event'])

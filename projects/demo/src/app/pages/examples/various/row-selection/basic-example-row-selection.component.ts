@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {DataSet, Settings} from 'angular2-smart-table';
+import {Settings} from 'angular2-smart-table';
 
 @Component({
   selector: 'basic-example-row-selection',
@@ -96,7 +96,7 @@ export class BasicExampleRowSelectionComponent {
     },
   ];
 
-  onGridInit(data: DataSet) {
+  onGridInit(data: any) {
     const rows = data.getRows();
     setInterval(() => {
       const randomIndex = Math.floor(Math.random() * rows.length - 1) + 1;

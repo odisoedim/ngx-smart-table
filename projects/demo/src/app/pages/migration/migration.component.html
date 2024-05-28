@@ -30,16 +30,14 @@
 
   <h4>Deprecated</h4>
   <p>
-    The following setting keys have been deprecated in 2.x and removed in 3.0.0:
+    The following setting keys are deprecated, but still work in the current version:
   </p>
   <ul>
-    <li><code>editable</code> was renamed to <code>isEditable</code></li>
-    <li><code>sort</code> was renamed to <code>isSortable</code></li>
-    <li>The possibility to set <code>filter</code> to false was replaced with an <code>isFilterable</code> attribute</li>
-    <li><code>expandedRowComponent</code> has been into <code>expand</code> and was renamed to <code>component</code></li>
-    <li><code>expandRowButtonContent</code> was renamed to <code>buttonContent</code> (it is already part of the <code>expand</code> settings group)</li>
-    <li><code>class</code> was split into the separate <code>classHeader</code> and <code>classContent</code> settings</li>
+    <li><code>editable</code> is now named <code>isEditable</code></li>
+    <li><code>sort</code> is now named <code>isSortable</code></li>
   </ul>
+  We advise you to change the setting keys as soon as possible. We do not plan on removing the deprecated keys anytime
+  soon, but things may change in the future.
 
   <h4>New Settings</h4>
   <p>
@@ -49,7 +47,7 @@
     This way you can control whether an attribute shall be immutable once it has been added.
   </p>
   <p>
-    <code>expand</code> - With these settings you can enable and configure
+    <code>expandedRowComponent</code> and <code>expand</code> - With these settings you can enable and configure
     an additional action button to expand rows into full blown angular components that are displayed next to the
     expanded row. Read the <a [routerLink]="['/documentation']">documentation</a> for details.
   </p>

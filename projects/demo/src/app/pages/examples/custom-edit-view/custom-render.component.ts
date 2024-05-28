@@ -1,17 +1,21 @@
-import {Component} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
-import {Cell} from 'angular2-smart-table';
+import { ViewCell } from 'angular2-smart-table';
 
 @Component({
   template: `
     {{renderValue}}
   `,
 })
-export class CustomRenderComponent {
+export class CustomRenderComponent implements ViewCell, OnInit {
 
-  renderValue: string = '';
+  renderValue!: string;
 
-  static componentInit(instance: CustomRenderComponent, cell: Cell) {
-    instance.renderValue = cell.getValue().toUpperCase();
+  @Input() value!: string | number;
+  @Input() rowData: any;
+
+  ngOnInit() {
+    this.renderValue = this.value.toString().toUpperCase();
   }
+
 }

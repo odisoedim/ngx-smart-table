@@ -1,16 +1,21 @@
 import {Observable, Subject} from 'rxjs';
-import {ColumnCompareFunction, ColumnFilterFunction, ISortDirection} from '../settings';
+import {ISortDirection} from '../settings';
 
 export interface ISortConfig {
   field: string,
   direction: ISortDirection,
-  compare?: ColumnCompareFunction,
+  compare?: Function,
 }
 
 export interface IFilterConfig {
   field: string,
   search: string,
-  filter?: ColumnFilterFunction,
+  filter?: Function,
+}
+
+export interface IDataSourceFilter {
+  filters: Array<IFilterConfig>,
+  andOperator: boolean;
 }
 
 export interface IPagingConfig {
@@ -22,7 +27,7 @@ export interface DataSourceChangeEvent {
   action: string,
   elements: any, // TODO: this should be Array<any> but getElements() returns Promise<any> for some reason....
   paging: IPagingConfig,
-  filter: IFilterConfig[];
+  filter: IDataSourceFilter;
   sort: ISortConfig[];
 }
 
@@ -37,7 +42,7 @@ export abstract class DataSource {
   abstract getElements(): Promise<any>;
   abstract getFilteredAndSorted(): Promise<any>;
   abstract getSort(): Array<ISortConfig>;
-  abstract getFilter(): Array<IFilterConfig>;
+  abstract getFilter(): IDataSourceFilter;
   abstract getPaging(): IPagingConfig;
 
   /**
@@ -74,7 +79,7 @@ export abstract class DataSource {
     return Promise.resolve();
   }
 
-  onChanged(): Observable<DataSourceChangeEvent> {
+  onChanged(): Observable<any> {
     return this.onChangedSource.asObservable();
   }
 
@@ -129,7 +134,7 @@ export abstract class DataSource {
    *
    * Array of conf objects
    * [
-   *  {field: string, direction: asc|desc|null, compare?: ColumnCompareFunction|null},
+   *  {field: string, direction: asc|desc|null, compare?: Function|null},
    * ]
    * @param conf the configuration to add
    * @param doEmit indicates whether a sort event shall be emitted
@@ -145,7 +150,7 @@ export abstract class DataSource {
    *
    * Array of conf objects
    * [
-   *  {field: string, direction: asc|desc|null, compare?: ColumnCompareFunction|null},
+   *  {field: string, direction: asc|desc|null, compare?: Function|null},
    * ]
    * @param conf the configuration to add
    * @param doEmit indicates whether a sort event shall be emitted
@@ -157,19 +162,13 @@ export abstract class DataSource {
     }
   }
 
-  setFilter(conf: Array<IFilterConfig>, doEmit?: boolean) {
+  setFilter(conf: Array<IFilterConfig>, andOperator?: boolean, doEmit?: boolean) {
     if (doEmit) {
       this.emitOnChanged('filter');
     }
   }
 
-  addFilter(fieldConf: IFilterConfig, doEmit?: boolean) {
-    if (doEmit) {
-      this.emitOnChanged('filter');
-    }
-  }
-
-  removeFilter(fieldName: string, doEmit?: boolean) {
+  addFilter(fieldConf: IFilterConfig, andOperator?: boolean, doEmit?: boolean) {
     if (doEmit) {
       this.emitOnChanged('filter');
     }

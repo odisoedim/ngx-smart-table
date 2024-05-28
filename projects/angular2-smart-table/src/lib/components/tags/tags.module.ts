@@ -16,4 +16,4 @@ import {TagsListComponent} from './tags-list/tags-list.component';
     TagsListComponent
   ],
 })
-export class TagsModule { }
+export class TabsModule { }

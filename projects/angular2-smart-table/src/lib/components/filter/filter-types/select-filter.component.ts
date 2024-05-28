@@ -3,7 +3,7 @@ import {NgControl} from '@angular/forms';
 import {debounceTime, distinctUntilChanged, skip} from 'rxjs/operators';
 
 import {DefaultFilter} from './default-filter';
-import {FilterSettings, ListFilterSettings} from "../../../lib/settings";
+import {defaultStringEqualsFilter, defaultStringInclusionFilter} from "../../../lib/data-source/local/local.filter";
 
 @Component({
   selector: 'select-filter',
@@ -13,8 +13,8 @@ import {FilterSettings, ListFilterSettings} from "../../../lib/settings";
             #inputControl
             [(ngModel)]="query">
 
-        <option value="">{{ config.selectText ?? 'Select...' }}</option>
-        <option *ngFor="let option of config.list" [value]="option.value">
+        <option value="">{{ column.getFilterConfig().selectText }}</option>
+        <option *ngFor="let option of column.getFilterConfig().list" [value]="option.value">
           {{ option.title }}
         </option>
     </select>
@@ -24,15 +24,8 @@ export class SelectFilterComponent extends DefaultFilter implements OnInit {
 
   @ViewChild('inputControl', { read: NgControl, static: true }) inputControl!: NgControl;
 
-  config!: ListFilterSettings;
-
   ngOnInit() {
-    this.config = (this.column.filter as FilterSettings).config as ListFilterSettings;
-    // if no filter function is provided, but filtering shall be strict, define the respective filter
-    const strict = this.config.strict === undefined || this.config.strict;
-    if (this.column.filterFunction === undefined && strict) {
-      this.column.filterFunction = (v, f) => v?.toString() === f;
-    }
+    this.column.filterFunction = this.onFilterValues.bind(this);
 
     const exist = this.inputControl.valueChanges;
     if (!exist) {
@@ -45,5 +38,14 @@ export class SelectFilterComponent extends DefaultFilter implements OnInit {
         debounceTime(this.delay)
       )
       .subscribe((value: string) => this.setFilter());
+  }
+
+  onFilterValues(cellValue: string, search: string, data: any, cellName: string) {
+    const strictFilter = this.column.getFilterConfig()?.strict ?? false;
+    if (strictFilter) {
+      return defaultStringEqualsFilter(cellValue, search, data, cellName);
+    } else {
+      return defaultStringInclusionFilter(cellValue, search, data, cellName);
+    }
   }
 }

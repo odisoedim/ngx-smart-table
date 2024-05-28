@@ -15,7 +15,7 @@ import {Column} from "../../../lib/data-set/column";
     <th angular2-st-actions-title *ngIf="showActionColumnLeft" [grid]="grid"></th>
     <th *ngFor="let column of visibleColumns; index as i; last as isLast"
         class="angular2-smart-th {{ column.id }}"
-        [ngClass]="column.classHeader"
+        [ngClass]="column.classHeader ?? ''"
         [style.width]="column.width"
     >
       <angular2-st-column-title
@@ -53,8 +53,8 @@ export class TheadTitlesRowComponent implements OnChanges {
     this.isMultiSelectVisible = this.grid.isMultiSelectVisible();
     this.showActionColumnLeft = this.grid.showActionColumn('left');
     this.showActionColumnRight = this.grid.showActionColumn('right');
-    this.isResizable = this.grid.settings.resizable ?? false;
-    this.isHideable = this.grid.settings.hideable ?? false;
+    this.isResizable = this.grid.getSetting('resizable');
+    this.isHideable = this.grid.getSetting('hideable');
   }
 
   get visibleColumns(): Array<Column> {

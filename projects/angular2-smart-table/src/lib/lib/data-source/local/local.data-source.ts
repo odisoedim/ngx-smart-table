@@ -1,15 +1,18 @@
 import {defaultComparator} from './local.sorter';
+import {LocalFilter} from './local.filter';
 import {LocalPager} from './local.pager';
-import {DataSource, IFilterConfig, IPagingConfig, ISortConfig} from '../data-source';
+import {DataSource, IDataSourceFilter, IFilterConfig, IPagingConfig, ISortConfig} from '../data-source';
 import {deepExtend} from '../../helpers';
-import {ColumnCompareFunction, ColumnFilterFunction} from "../../settings";
 
 export class LocalDataSource extends DataSource {
 
   protected data: Array<any> = [];
   protected filteredAndSorted: Array<any> = [];
   protected sortConf: Array<ISortConfig> = [];
-  protected filterConf: Array<IFilterConfig> = [];
+  protected filterConf: IDataSourceFilter = {
+    filters: [],
+    andOperator: true,
+  };
   protected pagingConf: IPagingConfig = {page: 1, perPage: 10};
 
   private selectedItems: Array<any> = [];
@@ -86,9 +89,18 @@ export class LocalDataSource extends DataSource {
   }
 
   reset(silent = false) {
-    this.setFilter([], false);
-    this.setSort([], false);
-    this.setPage(1, !silent);
+    if (silent) {
+      this.filterConf = {
+        filters: [],
+        andOperator: true,
+      };
+      this.sortConf = [];
+      this.pagingConf.page = 1;
+    } else {
+      this.setFilter([], true, false);
+      this.setSort([], false);
+      this.setPage(1);
+    }
   }
 
   empty(): Promise<any> {
@@ -135,12 +147,13 @@ export class LocalDataSource extends DataSource {
     return this.selectedItems;
   }
 
-  setSort(conf: Array<ISortConfig>, doEmit = true): void {
-    this.sortConf = conf;
+  setSort(conf: Array<ISortConfig>, doEmit = true): LocalDataSource {
+    this.sortConf = conf ?? [];
     super.setSort(conf, doEmit);
+    return this;
   }
 
-  updateSort(conf: Array<ISortConfig>, doEmit = true): void {
+  updateSort(conf: Array<ISortConfig>, doEmit = true): LocalDataSource {
     if (conf !== null) {
       conf.forEach((fieldConf) => {
         const found = this.sortConf.findIndex(c => c.field === fieldConf.field);
@@ -156,68 +169,73 @@ export class LocalDataSource extends DataSource {
       });
     }
     super.setSort(conf, doEmit);
+    return this;
   }
 
   /**
    *
-   * Replaces all filters with the given array of filters.
+   * Array of conf objects
    * [
-   *  {field: string, search: string, filter: ColumnCompareFunction|null},
+   *  {field: string, search: string, filter: Function|null},
    * ]
-   *
-   * @param conf the array of filters
-   * @param doEmit true if an event shall be emitted that triggers a table refresh
+   * @param conf
+   * @param andOperator
+   * @param doEmit
+   * @returns {LocalDataSource}
    */
-  setFilter(conf: Array<IFilterConfig>, doEmit = true): void {
-    this.filterConf = conf;
-    super.setFilter(conf, doEmit);
+  setFilter(conf: Array<IFilterConfig>, andOperator = true, doEmit = true): LocalDataSource {
+    if (conf && conf.length > 0) {
+      conf.forEach((fieldConf) => {
+        this.addFilter(fieldConf, andOperator, false);
+      });
+    } else {
+      this.filterConf = {
+        filters: [],
+        andOperator: true,
+      };
+    }
+    this.filterConf.andOperator = andOperator;
+    this.pagingConf.page = 1;
+
+    super.setFilter(conf, andOperator, doEmit);
+    return this;
   }
 
-  /**
-   *
-   * Adds a filter to this data source.
-   *
-   * {field: string, search: string, filter: ColumnFilterFunction|null},
-   *
-   * @param fieldConf the filter config
-   * @param doEmit true if an event shall be emitted that triggers a table refresh
-   */
-  addFilter(fieldConf: IFilterConfig, doEmit: boolean = true): void {
+  addFilter(fieldConf: IFilterConfig, andOperator = true, doEmit: boolean = true): LocalDataSource {
     let found = false;
-    this.filterConf.forEach((currentFieldConf: IFilterConfig, index: number) => {
+    this.filterConf.filters.forEach((currentFieldConf: IFilterConfig, index: number) => {
       if (currentFieldConf.field === fieldConf.field) {
-        this.filterConf[index] = fieldConf;
+        this.filterConf.filters[index] = fieldConf;
         found = true;
       }
     });
     if (!found) {
-      this.filterConf.push(fieldConf);
+      this.filterConf.filters.push(fieldConf);
     }
-    super.addFilter(fieldConf, doEmit);
+    this.filterConf.andOperator = andOperator;
+    super.addFilter(fieldConf, andOperator, doEmit);
+    return this;
   }
 
-  removeFilter(fieldName: string, doEmit: boolean = true): void {
-    this.filterConf = this.filterConf.filter(c => c.field !== fieldName);
-    super.removeFilter(fieldName, doEmit);
-  }
-
-  setPaging(page: number, perPage: number, doEmit: boolean = true): void {
+  setPaging(page: number, perPage: number, doEmit: boolean = true): LocalDataSource {
     this.pagingConf.page = page;
     this.pagingConf.perPage = perPage;
 
     super.setPaging(page, perPage, doEmit);
+    return this;
   }
 
-  setPage(page: number, doEmit: boolean = true): void {
+  setPage(page: number, doEmit: boolean = true): LocalDataSource {
     this.pagingConf.page = page;
     super.setPage(page, doEmit);
+    return this;
   }
 
   getSort(): Array<ISortConfig> {
     return this.sortConf;
   }
 
-  getFilter(): Array<IFilterConfig> {
+  getFilter(): IDataSourceFilter {
     return this.filterConf;
   }
 
@@ -240,7 +258,7 @@ export class LocalDataSource extends DataSource {
     return data.sort((a, b) => {
       for (const sc of sortConfig) {
         const dir: number = (sc.direction === 'asc') ? 1 : -1;
-        const compare: ColumnCompareFunction = sc.compare ? sc.compare : defaultComparator;
+        const compare: Function = sc.compare ? sc.compare : defaultComparator;
         let parts = sc.field.split(".");
         let propA = a;
         for (let i = 0; i < parts.length && typeof propA !== 'undefined'; i++) {
@@ -257,17 +275,25 @@ export class LocalDataSource extends DataSource {
     });
   }
 
+  // TODO: refactor?
   protected filter(data: Array<any>): Array<any> {
-    if (this.filterConf) {
-      for (const filterConf of this.filterConf) {
-        const filter: ColumnFilterFunction = filterConf.filter ?? ((v, s) => (v?.toString()??'').toLowerCase().includes(s.toLowerCase()));
-        data = data.filter((el) => {
-          let parts = filterConf.field.split(".");
-          let prop = el;
-          for (let i = 0; i < parts.length && typeof prop !== 'undefined'; i++) {
-            prop = prop[parts[i]];
+    if (this.filterConf.filters) {
+      if (this.filterConf.andOperator) {
+        this.filterConf.filters.forEach(fieldConf => {
+          if (fieldConf.search.length > 0) {
+            data = LocalFilter.filter(data, fieldConf);
           }
-          return filter.call(null, prop, filterConf.search);
+        });
+      } else {
+        let mergedData: any = [];
+        this.filterConf.filters.forEach((fieldConf: any) => {
+          if (fieldConf['search'].length > 0) {
+            mergedData = mergedData.concat(LocalFilter.filter(data, fieldConf));
+          }
+        });
+        // remove non unique items
+        data = mergedData.filter((elem: any, pos: any, arr: any) => {
+          return arr.indexOf(elem) === pos;
         });
       }
     }

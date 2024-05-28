@@ -1,5 +1,5 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {Cell, Settings} from 'angular2-smart-table';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { ViewCell, IColumnType } from 'angular2-smart-table';
 
 @Component({
   selector: 'button-view',
@@ -7,22 +7,20 @@ import {Cell, Settings} from 'angular2-smart-table';
     <button (click)="onClick()">{{ renderValue }}</button>
   `,
 })
-export class ButtonViewComponent {
+export class ButtonViewComponent implements ViewCell, OnInit {
   renderValue!: string;
-  name: string = '';
 
-  @Output() save: EventEmitter<void> = new EventEmitter();
+  @Input() value!: string | number;
+  @Input() rowData: any;
 
-  onClick() {
-    this.save.emit();
+  @Output() save: EventEmitter<any> = new EventEmitter();
+
+  ngOnInit() {
+    this.renderValue = this.value.toString().toUpperCase();
   }
 
-  static componentInit(instance: ButtonViewComponent, cell: Cell) {
-    instance.renderValue = cell.getValue().toUpperCase();
-    const name = cell.getRow().getData().name;
-    instance.save.subscribe((_: string) => {
-      alert(`${name} saved!`)
-    });
+  onClick() {
+    this.save.emit(this.rowData);
   }
 }
 
@@ -36,29 +34,33 @@ export class ButtonViewComponent {
 })
 export class BasicExampleButtonViewComponent implements OnInit {
 
-  settings: Settings = {
+  settings = {
     columns: {
       id: {
         title: 'ID',
-        type: 'text',
+        type: IColumnType.Text,
       },
       name: {
         title: 'Full Name',
-        type: 'text',
+        type: IColumnType.Text,
       },
       username: {
         title: 'User Name',
-        type: 'text',
+        type: IColumnType.Text,
       },
       email: {
         title: 'Email',
-        type: 'text',
+        type: IColumnType.Text,
       },
       button: {
         title: 'Button',
-        type: 'custom',
+        type: IColumnType.Custom,
         renderComponent: ButtonViewComponent,
-        componentInitFunction: ButtonViewComponent.componentInit,
+        onComponentInitFunction(instance: any) {
+          instance.save.subscribe((row: any) => {
+            alert(`${row.name} saved!`)
+          });
+        }
       },
     },
   };

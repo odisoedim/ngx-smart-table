@@ -57,12 +57,12 @@ export class AddButtonComponent implements AfterViewInit, OnChanges {
     event.stopPropagation();
     if (this.disabled) return;
 
-    if (this.grid.settings.mode === 'external') {
+    if (this.grid.getSetting('mode') === 'external') {
       this.create.emit({
         source: this.source,
       });
     } else {
-      this.grid.showCreateForm();
+      this.grid.createFormShown = true;
     }
   }
 }

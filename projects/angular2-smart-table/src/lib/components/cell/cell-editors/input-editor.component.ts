@@ -7,12 +7,12 @@ import {DefaultEditor} from './default-editor';
   styleUrls: ['./editor.component.scss'],
   template: `
     <input [ngClass]="inputClass"
-           [value]="cell.getValue()"
+           class="form-control"
+           [(ngModel)]="cell.newValue"
            [name]="cell.getId()"
            [placeholder]="cell.getTitle()"
            [disabled]="!cell.isEditable()"
            (click)="onClick.emit($event)"
-           (keyup)="cell.setValue($any($event.target).value)"
            (keydown.enter)="disableEnterKeySave || onEdited.emit()"
            (keydown.esc)="onStopEditing.emit()">
     `,

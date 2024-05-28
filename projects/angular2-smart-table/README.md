@@ -74,7 +74,7 @@ Now, we need to configure the table and add it into the template. The only <stro
 Let's register <i>settings</i> property inside of the component where we want to have the table and configure some columns [Settings documentation](https://github.com/dj-fiorex/angular2-smart-table):
     
 ```
-settings: Settings = {
+settings = {
   columns: {
     id: {
       title: 'ID'

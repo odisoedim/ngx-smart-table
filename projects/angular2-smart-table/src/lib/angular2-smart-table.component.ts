@@ -6,8 +6,8 @@ import {Row} from './lib/data-set/row';
 import {DataSource, DataSourceChangeEvent} from './lib/data-source/data-source';
 import {LocalDataSource} from './lib/data-source/local/local.data-source';
 import {Grid} from './lib/grid';
-import {deepExtend} from './lib/helpers';
-import {RowClassFunction, Settings} from './lib/settings';
+import {deepExtend, getPageForRowIndex} from './lib/helpers';
+import {IColumn, Settings} from './lib/settings';
 import {
   CreateCancelEvent,
   CreateConfirmEvent,
@@ -20,8 +20,6 @@ import {
   EditEvent,
   RowSelectionEvent,
 } from './lib/events';
-import {Column} from "./lib/data-set/column";
-import {TagsListEntry} from "./components/tags/tag/tag.component";
 
 @Component({
   selector: 'angular2-smart-table',
@@ -31,7 +29,7 @@ import {TagsListEntry} from "./components/tags/tag/tag.component";
 export class Angular2SmartTableComponent implements OnChanges, OnDestroy {
 
   @Input() source: any;
-  @Input() settings!: Settings;
+  @Input() settings: Settings = {};
 
   @Output() rowSelect = new EventEmitter<RowSelectionEvent>();
   @Output() userRowSelect = new EventEmitter<RowSelectionEvent>();
@@ -51,32 +49,35 @@ export class Angular2SmartTableComponent implements OnChanges, OnDestroy {
 
   tableClass!: string;
   tableId!: string;
-  perPageSelect!: number[];
-  perPageSelectLabel!: string;
+  perPageSelect: number[] = [];
+  perPageSelectLabel: string = 'Per Page:';
   isHideHeader!: boolean;
   isHideSubHeader!: boolean;
   isPagerDisplay!: boolean;
-  isTagListShown: boolean = true;
-  rowClassFunction!: RowClassFunction;
+  rowClassFunction!: Function;
 
-  grid!: Grid; // initially undefined, but will never be set to undefined, so we do not add undefined type here
-
+  grid!: Grid;
   defaultSettings: Settings = {
-    mode: 'inline',
-    selectMode: 'single',
+    mode: 'inline', // inline|external
+    selectMode: 'single', // single|multi|multi_filtered
+    /**
+     * Points to an element in all data
+     *
+     * when < 0 all lines must be deselected
+     */
+    selectedRowIndex: 0,
     switchPageToSelectedRowPage: false,
     hideHeader: false,
     hideSubHeader: false,
     resizable: false,
     hideable: false,
-    hideTagList: false,
     actions: {
       columnTitle: 'Actions',
       add: true,
       edit: true,
       delete: true,
       custom: [],
-      position: 'left',
+      position: 'left', // left|right
     },
     filter: {
       inputClass: '',
@@ -112,70 +113,85 @@ export class Angular2SmartTableComponent implements OnChanges, OnDestroy {
       display: true,
       page: 1,
       perPage: 10,
-      perPageSelect: [],
-      perPageSelectLabel: 'Per Page:',
     },
-    rowClassFunction: (_) => '',
+    rowClassFunction: () => '',
   };
 
   isAllSelected: boolean = false;
 
   private onSelectRowSubscription!: Subscription;
+  private onDeselectRowSubscription!: Subscription;
   private destroyed$: Subject<void> = new Subject<void>();
 
   ngOnChanges(changes: { [propertyName: string]: SimpleChange }) {
-    if (this.grid !== undefined) {
-      // grid is already created, just update the relevant properties
+    if (this.grid) {
       if (changes['settings']) {
         this.grid.setSettings(this.prepareSettings());
-        this.updateNotVisibleColumnTagList();
       }
       if (changes['source']) {
         this.source = this.prepareSource();
         this.grid.setSource(this.source);
       }
-    } else if (this.settings !== undefined && this.source !== undefined) {
-      // create a new grid, but only if settings and source are already available
-
-      this.source = this.prepareSource();
-      this.grid = new Grid(this.source, this.prepareSettings());
-      this.updateNotVisibleColumnTagList();
-
-      this.subscribeToOnSelectRow();
-      /** Delay a bit the grid init event trigger to prevent empty rows */
-      setTimeout(() => {
-        this.afterGridInit.emit(this.grid.dataSet);
-      }, 10);
+    } else {
+      this.initGrid();
     }
-
-    // once everything is set up, we can copy some settings
-    // we use the settings from the grid, because those are enriched with the defaults
-    if (this.grid !== undefined) {
-      this.tableId = this.grid.settings.attr!.id!;
-      this.tableClass = this.grid.settings.attr!.class!;
-      this.isHideHeader = this.grid.settings.hideHeader!;
-      this.isHideSubHeader = this.grid.settings.hideSubHeader!;
-      this.isTagListShown = !(this.grid.settings.hideTagList ?? false);
-      this.isPagerDisplay = this.grid.settings.pager!.display!;
-      this.perPageSelect = this.grid.settings.pager!.perPageSelect!;
-      this.perPageSelectLabel = this.grid.settings.pager!.perPageSelectLabel!;
-      this.rowClassFunction = this.grid.settings.rowClassFunction!;
-    }
+    this.tableId = this.grid.getSetting('attr.id');
+    this.tableClass = this.grid.getSetting('attr.class');
+    this.isHideHeader = this.grid.getSetting('hideHeader');
+    this.isHideSubHeader = this.grid.getSetting('hideSubHeader');
+    this.isPagerDisplay = this.grid.getSetting('pager.display');
+    this.isPagerDisplay = this.grid.getSetting('pager.display');
+    this.perPageSelect = this.grid.getSetting('pager.perPageSelect', this.perPageSelect);
+    this.perPageSelectLabel = this.grid.getSetting('pager.perPageSelectLabel', this.perPageSelectLabel);
+    this.rowClassFunction = this.grid.getSetting('rowClassFunction');
   }
 
   ngOnDestroy(): void {
     this.destroyed$.next();
   }
 
+  selectRow(index: number, switchPageToSelectedRowPage: boolean = this.grid.getSetting('switchPageToSelectedRowPage')): void {
+    if (!this.grid) {
+      return;
+    }
+    this.grid.settings.selectedRowIndex = index;
+    if (this.isIndexOutOfRange(index)) {
+      // we need to deselect all rows if we got an incorrect index
+      this.grid.dataSet.deselectAll();
+      this.emitSelectRow(null);
+      return;
+    }
+
+    if (switchPageToSelectedRowPage) {
+      const source: DataSource = this.source;
+      const paging: { page: number, perPage: number } = source.getPaging();
+      const page: number = getPageForRowIndex(index, paging.perPage);
+      index = index % paging.perPage;
+      this.grid.settings.selectedRowIndex = index;
+
+      if (page !== paging.page) {
+        source.setPage(page);
+        return;
+      }
+
+    }
+
+    const row: Row = this.grid.getRows()[index];
+    if (row) {
+      this.grid.selectRow(row);
+      this.emitSelectRow(row);
+    }
+  }
+
   onEditRowSelect(row: Row) {
-    if (this.grid.settings.selectMode === 'single') {
+    if (this.grid.getSetting('selectMode') === 'single') {
       this.grid.selectRow(row);
       this.emitSelectRow(row);
     }
   }
 
   onUserSelectRow(row: Row) {
-    if (this.grid.settings.selectMode === 'single') {
+    if (this.grid.getSetting('selectMode') === 'single') {
       this.grid.selectRow(row);
       this.emitUserSelectRow(row);
     }
@@ -203,6 +219,18 @@ export class Angular2SmartTableComponent implements OnChanges, OnDestroy {
     this.grid.expandRow(row);
   }
 
+  initGrid() {
+    this.source = this.prepareSource();
+    this.grid = new Grid(this.source, this.prepareSettings());
+
+    this.subscribeToOnSelectRow();
+    /** Delay a bit the grid init event trigger to prevent empty rows */
+    setTimeout(() => {
+      this.afterGridInit.emit(this.grid.dataSet);
+    }, 10);
+
+  }
+
   prepareSource(): DataSource {
     let source: DataSource;
     if (this.source instanceof DataSource) {
@@ -224,7 +252,7 @@ export class Angular2SmartTableComponent implements OnChanges, OnDestroy {
     // here we can already assume that the source has been lifted to an instance of DataSource
     const source = this.source as DataSource;
     this.isAllSelected = source.isEveryElementSelected(
-      this.grid.settings.selectMode === 'multi_filtered',
+      this.grid.getSetting('selectMode') === 'multi_filtered',
       true,
     );
   }
@@ -233,28 +261,18 @@ export class Angular2SmartTableComponent implements OnChanges, OnDestroy {
     return deepExtend({}, this.defaultSettings, this.settings);
   }
 
-  getNotVisibleColumns(): Column[] {
-    return (this.grid?.getColumns() ?? []).filter(column => column.hide);
+  getNotVisibleColumns(): Array<IColumn> {
+    return (this.grid?.getColumns() ?? []).filter((column: IColumn) => column.hide);
   }
 
-  notVisibleColumnTagsList: TagsListEntry[] = [];
-  updateNotVisibleColumnTagList() {
-    this.notVisibleColumnTagsList = this.getNotVisibleColumns().map(c => ({
-      key: c.id,
-      value: c.title,
-    }));
+  onShowHeader(columnId: string) {
+    (this.settings as any).columns[columnId].hide = false;
+    this.grid.setSettings(this.prepareSettings());
   }
 
-  onShowColumn(columnId: string) {
-    this.grid.settings.columns[columnId].hide = false;
-    this.grid.recreateDataSet();
-    this.updateNotVisibleColumnTagList();
-  }
-
-  onHideColumn(columnId: string) {
-    this.grid.settings.columns[columnId].hide = true;
-    this.grid.recreateDataSet();
-    this.updateNotVisibleColumnTagList();
+  onHideHeader(columnId: string) {
+    (this.settings as any).columns[columnId].hide = true;
+    this.grid.setSettings(this.prepareSettings());
   }
 
   private createRowSelectionEvent(row: Row | null): RowSelectionEvent {

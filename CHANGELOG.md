@@ -2,48 +2,6 @@
 
 This document lists the changes introduced by this fork.
 
-## Version 3.2.0
-
-* Add Angular 17 support
-* Add `hideTagList` setting to hide the tag list when columns are hidden
-* The `sortDirection` column setting can now be applied to more than one column
-
-## Version 3.1.1
-
-* Fix security bypass not applied to save and cancel button contents when configured
-
-## Version 3.1.0
-
-* Add new setting `valueCreateFunction`
-* Fix a critical issue with the inner state of an edited cell
-* The `strict` setting for `list` default filters is no longer overriding a custom provided filter function
-* Fix that the default sort direction for all columns is `asc` instead of "no sort"
-
-## Version 3.0.0
-
-* Upgrade to Angular 16 
-* Add proper typing to all settings
-* Improve signatures of `valuePrepareFunction`, and `filterFunction`
-* Add `valueStoreFunction` as counter-part of the `valuePrepareFunction`
-* Change how filters are configured:
-  * Add `removeFilter()` method
-  * Change `setFilter()` to always remove all existing filters, first
-  * Change filters to not automatically ignore empty strings
-  * Remove `andOperator` parameter from `setFilter()` and `addFilter()`
-* Fix inconsistent return types between `DataSource` methods and their `LocalDataSource` implementations
-* Change custom renderer initialization and remove `ViewCell` interface
-* Remove ng2-completer
-* Remove angular2-multiselect-dropdown
-* Remove date filter type
-* Remove partially broken `selectRow` function
-* Remove deprecated settings
-* Remove undocumented settings
-
-**Note:** With Angular 16 several breaking changes were introduced, which forced us to also introduce breaking changes
-plus we cannot guarantee anymore, that the software is working with Angular 15 and below. This is why we decided to
-have a hard cut by introducing a new major release that is only compatible with Angular 16 onwards.
-If you want to stick with Angular 14 or Angular 15, please use version 2.10.0.
-
 ## Version 2.10.1
 
 * Hotfix: `DataSet.select()` no longer throws an error when using a negative index to deselect all rows

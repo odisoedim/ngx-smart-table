@@ -42,7 +42,7 @@ export class TheadFitlersRowComponent implements OnChanges {
     this.isMultiSelectVisible = this.grid.isMultiSelectVisible();
     this.showActionColumnLeft = this.grid.showActionColumn('left');
     this.showActionColumnRight = this.grid.showActionColumn('right');
-    this.filterInputClass = this.grid.settings.filter?.inputClass ?? '';
+    this.filterInputClass = this.grid.getSetting('filter.inputClass');
   }
 
   getVisibleColumns(columns: Array<Column>): Array<Column> {

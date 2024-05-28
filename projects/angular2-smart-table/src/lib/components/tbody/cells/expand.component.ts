@@ -46,7 +46,7 @@ import {SecurityTrustType} from '../../../pipes/bypass-security-trust.pipe';
 
 
     ngOnChanges() {
-        this.buttonContent = this.grid.settings.expand?.buttonContent ?? 'Expand';
+        this.buttonContent = this.grid.settings.expand?.buttonContent ?? this.grid.settings.expand?.expandRowButtonContent ?? 'Expand';
         this.bypassSecurityTrust = this.grid.settings.expand?.sanitizer?.bypassHtml ? 'html' : 'none';
 
         this.hiddenWhenFunction = this.grid.settings.expand?.hiddenWhen ?? this.hiddenWhenFunction;

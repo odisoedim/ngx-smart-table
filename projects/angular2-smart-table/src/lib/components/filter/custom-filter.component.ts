@@ -1,4 +1,4 @@
-import {Component, OnChanges, OnDestroy, SimpleChanges, ViewChild, ViewContainerRef} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild, ViewContainerRef} from '@angular/core';
 
 import {FilterDefault} from './filter-default';
 
@@ -7,6 +7,7 @@ import {FilterDefault} from './filter-default';
   template: `<ng-template #dynamicTarget></ng-template>`,
 })
 export class CustomFilterComponent extends FilterDefault implements OnChanges, OnDestroy {
+  @Input() query!: string;
   customComponent: any;
   @ViewChild('dynamicTarget', { read: ViewContainerRef, static: true }) dynamicTarget!: ViewContainerRef;
 

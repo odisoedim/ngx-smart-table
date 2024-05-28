@@ -11,17 +11,14 @@ export class FilterDefault {
   @Input() column!: Column;
   @Input() source!: DataSource;
   @Input() inputClass: string = '';
-  @Input() query: string = '';
+
+  query: string = '';
 
   onFilter(query: string) {
-    if (query === '') {
-      this.source.removeFilter(this.column.id);
-    } else {
-      this.source.addFilter({
-        field: this.column.id,
-        search: query,
-        filter: this.column.filterFunction,
-      });
-    }
+    this.source.addFilter({
+      field: this.column.id,
+      search: query,
+      filter: this.column.getFilterFunction(),
+    });
   }
 }

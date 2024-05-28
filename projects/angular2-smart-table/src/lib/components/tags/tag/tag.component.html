@@ -1,19 +1,20 @@
-<div style="padding: .25em; display: inline; white-space: nowrap">
+<div style="padding: 5px; display: inline; white-space: nowrap">
   <svg
+    style="width: 15px"
     (click)="closeClicked($event)"
-    style="width: 1.2em; cursor: pointer"
     aria-hidden="true"
     focusable="false"
+    data-prefix="fas"
+    data-icon="times-circle"
+    class="svg-inline--fa fa-times-circle fa-w-16"
     role="img"
-    viewBox="0 0 64 64"
-    id="svg19"
-    xmlns="http://www.w3.org/2000/svg">
-    <defs id="defs23"/>
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 512 512"
+  >
     <path
       fill="currentColor"
-      d="m 32.271186,1.2711864 c -17.125,0 -30.9999996,13.8749996 -30.9999996,30.9999996 0,17.125 13.8749996,31 30.9999996,31 17.125,0 31,-13.875 31,-31 0,-17.125 -13.875,-30.9999996 -31,-30.9999996 z m 15.2,39.1374996 c 0.5875,0.5875 0.5875,1.5375 0,2.125 l -4.95,4.9375 c -0.5875,0.5875 -1.5375,0.5875 -2.125,0 l -8.125,-8.2 -8.1375,8.2 c -0.5875,0.5875 -1.5375,0.5875 -2.125,0 l -4.9375,-4.95 c -0.5875,-0.5875 -0.5875,-1.5375 0,-2.125 l 8.2,-8.125 -8.2,-8.1375 c -0.5875,-0.5875 -0.5875,-1.5375 0,-2.125 l 4.95,-4.95 c 0.5875,-0.5875 1.5375,-0.5875 2.125,0 l 8.125,8.2125 8.1375,-8.2 c 0.5875,-0.5875 1.5375,-0.5875 2.125,0 l 4.95,4.95 c 0.5875,0.5875 0.5875,1.5375 0,2.125 l -8.2125,8.125 z"
-      id="path17"
-      style="stroke-width:0.125"/>
+      d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"
+    ></path>
   </svg>
-  <span style="margin-left: 3px; font-size: 1.5em">{{ item.value }}</span>
+  <span style="margin-left: 3px" class="itemText">{{ item.title }}</span>
 </div>

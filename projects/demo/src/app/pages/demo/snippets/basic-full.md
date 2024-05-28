@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
 })
 export class BasicExampleDataComponent {
 
-  settings: Settings = {
+  settings = {
     columns: {
       id: {
         title: 'ID'

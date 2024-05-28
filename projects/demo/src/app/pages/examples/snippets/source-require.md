@@ -1,0 +1,1 @@
+import { NgxSmartTableModule, LocalDataSource } from 'angular2-smart-table';

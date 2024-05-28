@@ -1,44 +1,59 @@
-import {AfterViewInit, Component} from '@angular/core';
-import {DefaultEditor} from 'angular2-smart-table';
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { DefaultEditor } from 'angular2-smart-table';
 
 @Component({
   template: `
     Name: <input [ngClass]="inputClass"
-            [value]="name"
+            #name
+            class="form-control short-input"
+            [name]="cell.getId()"
             [disabled]="!cell.isEditable()"
             [placeholder]="cell.getTitle()"
             (click)="onClick.emit($event)"
-            (change)="name=$any($event.target).value; updateValue()"
+            (keyup)="updateValue()"
             (keydown.enter)="onEdited.emit()"
             (keydown.esc)="onStopEditing.emit()"><br>
     Url: <input [ngClass]="inputClass"
-            [value]="url"
+            #url
+            class="form-control short-input"
+            [name]="cell.getId()"
             [disabled]="!cell.isEditable()"
             [placeholder]="cell.getTitle()"
             (click)="onClick.emit($event)"
-            (change)="url=$any($event.target).value; updateValue()"
+            (keyup)="updateValue()"
             (keydown.enter)="onEdited.emit()"
             (keydown.esc)="onStopEditing.emit()">
+    <div [hidden]="true" [innerHTML]="cell.getValue()" #htmlValue></div>
   `,
 })
 export class CustomEditorComponent extends DefaultEditor implements AfterViewInit {
 
-  name: string = '';
-  url: string = '';
+  @ViewChild('name') name!: ElementRef;
+  @ViewChild('url') url!: ElementRef;
+  @ViewChild('htmlValue') htmlValue!: ElementRef;
 
   constructor() {
     super();
   }
 
   ngAfterViewInit() {
-    const re = this.cell.getValue().match(/<a href="([^"]*)">([^<]*)<\/a>/);
-    if (re !== null) {
-      this.url = re[1];
-      this.name = re[2];
+    if (this.cell.newValue !== '') {
+      this.name.nativeElement.value = this.getUrlName();
+      this.url.nativeElement.value = this.getUrlHref();
     }
   }
 
   updateValue() {
-    this.cell.setValue(`<a href='${this.url}'>${this.name}</a>`);
+    const href = this.url.nativeElement.value;
+    const name = this.name.nativeElement.value;
+    this.cell.newValue = `<a href='${href}'>${name}</a>`;
+  }
+
+  getUrlName(): string {
+    return this.htmlValue.nativeElement.innerText;
+  }
+
+  getUrlHref(): string {
+    return this.htmlValue.nativeElement.querySelector('a').getAttribute('href');
   }
 }

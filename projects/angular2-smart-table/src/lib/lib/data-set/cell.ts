@@ -1,15 +1,16 @@
 import {Column} from './column';
+import {DataSet} from './data-set';
 import {Row} from './row';
+
+export function prepareValue (value: any) { return value }
 
 export class Cell {
 
-  private cachedValue: unknown;
-  private cachedPreparedValue: string = '';
+  newValue: any = '';
+  protected static PREPARE = prepareValue;
 
-  private newValue: unknown;
-
-  constructor(protected value: unknown, protected row: Row, protected column: Column) {
-    this.resetValue();
+  constructor(protected value: any, protected row: Row, protected column: any, protected dataSet: DataSet) {
+    this.newValue = value;
   }
 
   getColumn(): Column {
@@ -23,43 +24,21 @@ export class Cell {
   /**
    * Gets the value (after post-processing with valuePrepareFunction).
    */
-  getValue(): string {
-    if (this.cachedValue !== this.value) {
-      this.cachedPreparedValue = this.getPreparedValue();
-      this.cachedValue = this.value;
-    }
-    return this.cachedPreparedValue;
-  }
-
-  protected getPreparedValue(): string {
-    try {
-      const prepare = this.column.valuePrepareFunction ?? ((v) => (v?.toString() ?? ''));
-      return prepare.call(null, this.value, this);
-    } catch (_) {
-      console.error(`The valuePrepareFunction of column ${this.column.id} threw an error. Using simple toString() as fallback.`);
-      console.error('Please check the implementation of valuePrepareFunction.');
-      console.error('If this error was raised when creating a new row, please also check the implementation of valueCreateFunction.');
-      return this.value?.toString() ?? '';
-    }
+  getValue(): any {
+    const valid = this.column.getValuePrepareFunction() instanceof Function;
+    const prepare = valid ? this.column.getValuePrepareFunction() : Cell.PREPARE;
+    return prepare.call(null, this.value, this.row.getData(), this);
   }
 
   /**
    * Returns the raw value that has not been post-processed by the valuePrepareFunction.
    */
-  getRawValue(): unknown {
+  getRawValue(): any {
     return this.value;
   }
 
-  setValue(value: string) {
-    const store = this.column.valueStoreFunction ?? ((v) => v);
-    this.newValue = store.call(null, value, this);
-  }
-
-  /**
-   * Returns the new raw value after being post-processed by the valueStoreFunction.
-   */
-  getNewRawValue(): any {
-    return this.newValue;
+  setValue(value: any): any {
+    this.newValue = value;
   }
 
   getId(): string {
@@ -80,8 +59,6 @@ export class Cell {
   }
 
   resetValue(): void {
-    this.cachedValue = this.value;
-    this.newValue = this.value;
-    this.cachedPreparedValue = this.getPreparedValue();
+    this.newValue = this.getRawValue();
   }
 }

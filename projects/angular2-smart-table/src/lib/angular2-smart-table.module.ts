@@ -5,7 +5,7 @@ import {Angular2SmartTableComponent} from './angular2-smart-table.component';
 import {CellModule} from './components/cell/cell.module';
 import {FilterModule} from './components/filter/filter.module';
 import {PagerModule} from './components/pager/pager.module';
-import {TagsModule} from './components/tags/tags.module';
+import {TabsModule} from './components/tags/tags.module';
 import {TBodyModule} from './components/tbody/tbody.module';
 import {THeadModule} from './components/thead/thead.module';
 
@@ -23,7 +23,7 @@ import {THeadModule} from './components/thead/thead.module';
     PagerModule,
     TBodyModule,
     THeadModule,
-    TagsModule
+    TabsModule
   ],
   exports: [
     Angular2SmartTableComponent
